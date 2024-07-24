@@ -1,0 +1,29 @@
+{
+    "name": "ww-toolblox",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/weweb-assets/ww-button"
+    },
+    "version": "3.2.0",
+    "license": "UNLICENSED",
+    "scripts": {
+        "build": "weweb build",
+        "serve": "weweb serve",
+        "create-config": "weweb config"
+    },
+    "dependencies": {
+        "@web3auth/base": "^8.8.0",
+        "@web3auth/ethereum-provider": "^8.10.2",
+        "@web3auth/no-modal": "^8.10.2",
+        "@web3auth/openlogin-adapter": "^8.8.0"
+    },
+    "devDependencies": {
+        "@vue/eslint-config-prettier": "^6.0.0",
+        "@weweb/cli": "github:sgraphics/weweb-cli#webpack-fallbacks",
+        "eslint": "^7.7.0",
+        "babel-eslint": "^10.1.0",
+        "eslint-plugin-prettier": "^3.1.4",
+        "eslint-plugin-vue": "7.0.0-beta.4",
+        "prettier": "^2.1.2"
+    }
+}
