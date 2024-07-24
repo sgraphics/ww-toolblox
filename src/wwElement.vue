@@ -369,12 +369,18 @@ export default {
 
             const startXLogin = async () => {
                 try {
+                    
+            alert(2);
                     const authUrl = await fetchRequestUrlFromXano();
+                    
+            alert(authUrl);
                     window.location.href = authUrl;
                 } catch (error) {
                     console.error("Login failed:", error);
+                    alert(error);
                 }
             };
+            alert(1);
             startXLogin();
         },
         /* wwEditor:end */
