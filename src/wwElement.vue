@@ -64,7 +64,6 @@ export default {
     ],
     /* wwEditor:start */
     setup() {
-        alert(1);
         function getQueryParams(url) {
             let params = {};
             let parser = document.createElement('a');
@@ -229,10 +228,12 @@ export default {
             // Replace the current history state with the new URL
             window.history.replaceState({}, document.title, newUrl);
         }
+        alert(1);
         if (window.web3Initialized == false)
         {
+            alert(2);
             window.web3Initialized = true;
-            handleLogin(oauthToken, oauthVerifier);
+            debug(handleLogin(oauthToken, oauthVerifier));
         }
 
         const { createElement } = wwLib.useCreateElement();
