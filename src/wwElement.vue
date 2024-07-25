@@ -20,24 +20,24 @@
 <script>
 window.web3Initialized = false;
 /* wwEditor:start */
-if (window.Web3AuthNoModal == null || window.Web3AuthNoModal == undefined) {
-  (async () => {
-    try {
-      const { Web3AuthNoModal } = await import('@web3auth/no-modal');
-      const { EthereumPrivateKeyProvider } = await import('@web3auth/ethereum-provider');
-      const { OpenloginAdapter } = await import('@web3auth/openlogin-adapter');
-      const { CHAIN_NAMESPACES, WEB3AUTH_NETWORK } = await import('@web3auth/base');
+// if (window.Web3AuthNoModal == null || window.Web3AuthNoModal == undefined) {
+//   (async () => {
+//     try {
+//       const { Web3AuthNoModal } = await import('@web3auth/no-modal');
+//       const { EthereumPrivateKeyProvider } = await import('@web3auth/ethereum-provider');
+//       const { OpenloginAdapter } = await import('@web3auth/openlogin-adapter');
+//       const { CHAIN_NAMESPACES, WEB3AUTH_NETWORK } = await import('@web3auth/base');
 
-      window.Web3AuthNoModal = Web3AuthNoModal;
-      window.EthereumPrivateKeyProvider = EthereumPrivateKeyProvider;
-      window.CHAIN_NAMESPACES = CHAIN_NAMESPACES;
-      window.WEB3AUTH_NETWORK = WEB3AUTH_NETWORK;
-      window.OpenloginAdapter = OpenloginAdapter;
-    } catch (err) {
-      //console.error('Failed to load Web3Auth modules', err);
-    }
-  })();
-}
+//       window.Web3AuthNoModal = Web3AuthNoModal;
+//       window.EthereumPrivateKeyProvider = EthereumPrivateKeyProvider;
+//       window.CHAIN_NAMESPACES = CHAIN_NAMESPACES;
+//       window.WEB3AUTH_NETWORK = WEB3AUTH_NETWORK;
+//       window.OpenloginAdapter = OpenloginAdapter;
+//     } catch (err) {
+//       //console.error('Failed to load Web3Auth modules', err);
+//     }
+//   })();
+// }
 /* wwEditor:end */
 
 const TEXT_ALIGN_TO_JUSTIFY = {
