@@ -138,7 +138,7 @@ export default {
 
             const web3AuthOptions = {
                 clientId,
-                web3AuthNetwork: window.WEB3AUTH_NETWORK.SAPPHIRE_TESTNET,
+                web3AuthNetwork: window.WEB3AUTH_NETWORK.SAPPHIRE_DEVNET,
                 privateKeyProvider,
             };
 
