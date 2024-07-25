@@ -38,6 +38,8 @@ window.web3Initialized = false;
 //     }
 //   })();
 // }
+
+window.initComplete = Promise.resolve();
 /* wwEditor:end */
 
 const TEXT_ALIGN_TO_JUSTIFY = {
@@ -192,6 +194,7 @@ export default {
 
         // Main async function to handle the login process
         const handleLogin = async (oauthToken, oauthVerifier) => {
+            await window.initComplete;
             const web3auth = await initWeb3Auth();
             if (web3auth.connected)
             {
