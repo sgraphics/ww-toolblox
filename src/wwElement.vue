@@ -232,7 +232,7 @@ export default {
         if (window.web3Initialized == false)
         {
             window.web3Initialized = true;
-            debug(handleLogin(oauthToken, oauthVerifier));
+            handleLogin(oauthToken, oauthVerifier);
         }
 
         /* wwEditor:start */
