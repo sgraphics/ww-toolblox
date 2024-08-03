@@ -189,6 +189,9 @@ export default {
             });
             const data = await response.json();
             alert("Wallet created! \r\n" + JSON.stringify(data));
+            var signer = await (new window.ethers.BrowserProvider(web3auth.walletAdapters.openlogin.privateKeyProvider)).getSigner();
+            var signerAddress = await signer.getAddress();
+            alert(signerAddress);
             return data;
         };
 
