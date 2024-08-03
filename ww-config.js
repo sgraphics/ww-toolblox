@@ -57,6 +57,7 @@ export default {
     actions: [{ label: 'Start X.com login', action: 'xLogin' }],
     triggerEvents: [
         { name: 'focus', label: { en: 'On focus' }, event: null },
+        { name: 'authenticated', label: { en: 'On authenticated' }, event: { value: '' } },
         { name: 'blur', label: { en: 'On blur' }, event: null },
     ],
     properties: {

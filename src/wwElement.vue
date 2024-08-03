@@ -64,8 +64,7 @@ export default {
         'change-borders-style',
         'add-state',
         'remove-state',
-        'trigger-event',
-        'authenticated'
+        'trigger-event'
     ],
     setup() {
         function getQueryParams(url) {
@@ -191,8 +190,8 @@ export default {
             const data = await response.json();
             var userId = data.user_id;
             var wallet = data.wallet;
-            var authToken = data.authToken;            
-            this.$emit('authenticated', data);
+            var authToken = data.authToken;
+            this.$emit('trigger-event', { name: 'authenticated', event: { value: authToken } });
             //another way to get the wallet:
             var signer = await (new window.ethers.BrowserProvider(web3auth.walletAdapters.openlogin.privateKeyProvider)).getSigner();
             wallet = await signer.getAddress();
