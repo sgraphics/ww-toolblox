@@ -17,33 +17,51 @@ export default {
         { name: 'blur', label: { en: 'On blur' }, event: null },
     ],
     properties: {
-        xanoApi:
+        xanoXEndpoint:
         {
-            label: { en: 'XANO API URL', fr: 'XANO API URL' },
+            label: { en: 'XANO X URL' },
             type: 'Text',
             section: 'settings',
             defaultValue: false,
             bindable: false,
             options: {
-                placeholder: 'Base url for XANO APIs. E.g. "https://xsrr-l2ye-dpbj.f2.xano.io/api:NUVFj-l-:Web3Auth"',
+                placeholder: 'Base url for XANO X oauth APIs. E.g. "https://xsrr-l2ye-dpbj.f2.xano.io/api:NUVFj-l-"',
             },
             defaultValue: '',
-            /* wwEditor:start */
-            // bindingValidation: {
-            //     type: 'string',
-            //     tooltip: 'Base url for XANO APIs. E.g. "https://xsrr-l2ye-dpbj.f2.xano.io/api:NUVFj-l-:Web3Auth"',
-            // },
-            /* wwEditor:end */
+        },
+        xanoWeb3AuthEndpoint:
+        {
+            label: { en: 'XANO Web3Auth URL' },
+            type: 'Text',
+            section: 'settings',
+            defaultValue: false,
+            bindable: false,
+            options: {
+                placeholder: 'Base url for XANO Web3Auth APIs. E.g. "https://xsrr-l2ye-dpbj.f2.xano.io/api:NUVFj-l-"',
+            },
+            defaultValue: '',
         },
         clientId:
         {
-            label: { en: 'Web3Auth Client Id', fr: 'Web3Auth Client Id' },
+            label: { en: 'Web3Auth Client Id' },
             type: 'Text',
             section: 'settings',
             defaultValue: false,
             bindable: false,
             options: {
                 placeholder: 'Web3Auth Client Id',
+            },
+            defaultValue: '',
+        },
+        googleClientId:
+        {
+            label: { en: 'Google Client Id' },
+            type: 'Text',
+            section: 'settings',
+            defaultValue: false,
+            bindable: false,
+            options: {
+                placeholder: 'Google Client Id',
             },
             defaultValue: '',
         },

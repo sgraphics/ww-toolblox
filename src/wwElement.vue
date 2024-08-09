@@ -59,7 +59,7 @@ export default {
             return params;
         }
         const fetchJWTFromXano = async (oauthToken, oauthVerifier) => {
-            const response = await fetch(this.content.xanoApi + '/oauth/twitter/access_token', {
+            const response = await fetch(this.content.xanoXEndpoint + '/oauth/twitter/access_token', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -150,7 +150,7 @@ export default {
             const authenticationResult = await web3auth.authenticateUser();
             
             const web3authToken = authenticationResult.idToken;
-            const response = await fetch(this.content.xanoApi + '/oauth/web3auth/authenticate', {
+            const response = await fetch(this.content.xanoWeb3AuthEndpoint + '/oauth/web3auth/authenticate', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -280,7 +280,7 @@ export default {
         xLogin() {
             
             const fetchRequestUrlFromXano = async () => {
-                const response = await fetch(this.content.xanoApi + '/oauth/twitter/request_token?redirect_uri=' + window.location.href, {
+                const response = await fetch(this.content.xanoXEndpoint + '/oauth/twitter/request_token?redirect_uri=' + window.location.href, {
                     method: 'GET'
                 });
                 const data = await response.json();
