@@ -45,7 +45,7 @@ export default {
         'remove-state',
         'trigger-event'
     ],
-    setup() {
+    beforeMount() {
         function getQueryParams(url) {
             let params = {};
             let parser = document.createElement('a');
@@ -110,7 +110,7 @@ export default {
             const privateKeyProvider = new window.EthereumPrivateKeyProvider({
                 config: { chainConfig },
             });
-            var clientId = this.content.clientId;//"BCD3bVaYA3ZHu3F0bEs6eEyk3OzC1zZvTwkFkFQsiicid-7H4bxyQgBlC9IxCipUYlEbQ1P6ZqBzuDBAMx7svIA";
+            var clientId = this.content.clientId;
 
             const web3AuthOptions = {
                 clientId,
@@ -222,15 +222,15 @@ export default {
             handleLogin(oauthToken, oauthVerifier);
         }
 
-        /* wwEditor:start */
-        const { createElement } = wwLib.useCreateElement();
-        /* wwEditor:end */
+        // /* wwEditor:start */
+        // const { createElement } = wwLib.useCreateElement();
+        // /* wwEditor:end */
 
-        return {
-            /* wwEditor:start */
-            createElement,
-            /* wwEditor:end */
-        };
+        // return {
+        //     /* wwEditor:start */
+        //     createElement,
+        //     /* wwEditor:end */
+        // };
     },
     data() {
         return {
@@ -307,5 +307,8 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
+.ww-typeform-embed.ww-editing {
+    pointer-events: none;
+}
 </style>
