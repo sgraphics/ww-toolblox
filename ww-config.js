@@ -69,14 +69,14 @@ export default {
             defaultValue: false,
             bindable: false,
             options: {
-                placeholder: 'xano-api',
+                placeholder: 'Base url for XANO APIs. E.g. "https://xsrr-l2ye-dpbj.f2.xano.io/api:NUVFj-l-:Web3Auth"',
             },
             defaultValue: '',
             /* wwEditor:start */
-            bindingValidation: {
-                type: 'string',
-                tooltip: 'Base url for XANO APIs. E.g. "https://xsrr-l2ye-dpbj.f2.xano.io/api:NUVFj-l-:Web3Auth"',
-            },
+            // bindingValidation: {
+            //     type: 'string',
+            //     tooltip: 'Base url for XANO APIs. E.g. "https://xsrr-l2ye-dpbj.f2.xano.io/api:NUVFj-l-:Web3Auth"',
+            // },
             /* wwEditor:end */
         },
         backgroundColor: {
