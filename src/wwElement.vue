@@ -27,12 +27,6 @@ window.web3Initialized = false;
 //window.initComplete = Promise.resolve();
 /* wwEditor:end */
 
-const TEXT_ALIGN_TO_JUSTIFY = {
-    center: 'center',
-    right: 'flex-end',
-    left: 'flex-start',
-    justify: 'center',
-};
 export default {
     props: {
         content: { type: Object, required: true },
@@ -244,11 +238,6 @@ export default {
         };
     },
     computed: {
-        buttonStyle() {
-            return {
-                justifyContent: TEXT_ALIGN_TO_JUSTIFY[this.content['_ww-text_textAlign']] || 'center',
-            };
-        },
         isEditing() {
             /* wwEditor:start */
             return this.wwEditorState.editMode === wwLib.wwEditorHelper.EDIT_MODES.EDITION;
@@ -257,27 +246,7 @@ export default {
             return false;
         },
         tag() {
-            if (this.isEditing) return 'div';
-            if (
-                this.content.buttonType === 'submit' ||
-                this.content.buttonType === 'reset' ||
-                this.content.buttonType === 'button'
-            )
-                return 'button';
             return 'div';
-        },
-        buttonType() {
-            if (this.isEditing) return '';
-            if (
-                this.content.buttonType === 'submit' ||
-                this.content.buttonType === 'reset' ||
-                this.content.buttonType === 'button'
-            )
-                return this.content.buttonType;
-            return '';
-        },
-        text() {
-            return this.wwElementState.props.text;
         },
         isFocused() {
             /* wwEditor:start */
@@ -289,40 +258,6 @@ export default {
         },
     },
     watch: {
-        /* wwEditor:start */
-        'content.hasRightIcon': {
-            async handler(hasRightIcon) {
-                if (this.wwEditorState.isACopy) {
-                    return;
-                }
-                if (hasRightIcon && !this.content.rightIcon) {
-                    const content = await this.createElement('ww-icon');
-                    this.$emit('update:content:effect', { rightIcon: content });
-                }
-            },
-        },
-        'content.hasLeftIcon': {
-            async handler(hasLeftIcon) {
-                if (this.wwEditorState.isACopy) {
-                    return;
-                }
-                if (hasLeftIcon && !this.content.leftIcon) {
-                    const content = await this.createElement('ww-icon');
-                    this.$emit('update:content:effect', { leftIcon: content });
-                }
-            },
-        },
-        /* wwEditor:end */
-        'content.disabled': {
-            immediate: true,
-            handler(value) {
-                if (value) {
-                    this.$emit('add-state', 'disabled');
-                } else {
-                    this.$emit('remove-state', 'disabled');
-                }
-            },
-        },
         isReallyFocused(isFocused, wasFocused) {
             if (isFocused && !wasFocused) {
                 this.$emit('trigger-event', { name: 'focus' });
@@ -342,21 +277,6 @@ export default {
         },
     },
     methods: {
-        /* wwEditor:start */
-        selectParentFormContainer() {
-            const parentUid = wwLib.selectParentByFlag(this.$el, 'form-container');
-            if (!parentUid) {
-                wwLib.wwNotification.open({
-                    text: {
-                        en: 'No parent form container found. Please, add this submit button into a form container.',
-                        fr: 'Aucun formulaire parent trouvé. Veuillez intégrer ce bouton submit dans un form container.',
-                    },
-                    color: 'yellow',
-                    duration: 6000,
-                });
-            }
-        },
-        /* wwEditor:end */
         xLogin() {
             
             const fetchRequestUrlFromXano = async () => {
