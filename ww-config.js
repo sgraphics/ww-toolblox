@@ -61,6 +61,24 @@ export default {
         { name: 'blur', label: { en: 'On blur' }, event: null },
     ],
     properties: {
+        xanoApi:
+        {
+            label: { en: 'XANO API URL', fr: 'XANO API URL' },
+            type: 'Text',
+            section: 'settings',
+            defaultValue: false,
+            bindable: false,
+            options: {
+                placeholder: 'xano-api',
+            },
+            defaultValue: '',
+            /* wwEditor:start */
+            bindingValidation: {
+                type: 'string',
+                tooltip: 'Base url for XANO APIs. E.g. "https://xsrr-l2ye-dpbj.f2.xano.io/api:NUVFj-l-:Web3Auth"',
+            },
+            /* wwEditor:end */
+        },
         backgroundColor: {
             label: {
                 en: 'Text Background',

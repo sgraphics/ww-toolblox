@@ -1,20 +1,5 @@
 <template>
     <span style="width:200px;height:300px">&nbsp;&nbsp;</span>
-    <!-- <component
-        :is="tag"
-        class="ww-button"
-        :class="{ button: tag }"
-        :type="buttonType"
-        :style="buttonStyle"
-        :data-ww-flag="'btn-' + content.buttonType"
-        :disabled="content.disabled"
-        @focus="isReallyFocused = true"
-        @blur="onBlur($event)"
-    >
-        <wwElement v-if="content.hasLeftIcon && content.leftIcon" v-bind="content.leftIcon"></wwElement>
-        <wwText tag="span" :text="text"></wwText>
-        <wwElement v-if="content.hasRightIcon && content.rightIcon" v-bind="content.rightIcon"></wwElement>
-    </component> -->
 </template>
 
 <script>
@@ -39,7 +24,7 @@ window.web3Initialized = false;
 //   })();
 // }
 
-window.initComplete = Promise.resolve();
+//window.initComplete = Promise.resolve();
 /* wwEditor:end */
 
 const TEXT_ALIGN_TO_JUSTIFY = {
@@ -79,14 +64,8 @@ export default {
             }
             return params;
         }
-
-        // Get query parameters
-        let queryParams = getQueryParams(window.location.href);
-        // Extract oauth_token and oauth_verifier
-        let oauthToken = queryParams['oauth_token'];
-        let oauthVerifier = queryParams['oauth_verifier'];
         const fetchJWTFromXano = async (oauthToken, oauthVerifier) => {
-            const response = await fetch('https://xsrr-l2ye-dpbj.f2.xano.io/api:NUVFj-l-:Web3Auth/oauth/twitter/access_token', {
+            const response = await fetch(this.content.xanoApi + '/oauth/twitter/access_token', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -176,9 +155,8 @@ export default {
         const sendWeb3AuthTokenToXano = async (web3auth) => {
             const authenticationResult = await web3auth.authenticateUser();
             
-            // prompt("sdasd", authenticationResult.idToken);
-            const web3authToken = authenticationResult.idToken; // Replace with the correct way to get the token from provider
-            const response = await fetch('https://xsrr-l2ye-dpbj.f2.xano.io/api:NUVFj-l-:Web3Auth/oauth/web3auth/authenticate', {
+            const web3authToken = authenticationResult.idToken;
+            const response = await fetch(this.content.xanoApi + '/oauth/web3auth/authenticate', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -188,13 +166,15 @@ export default {
                 })
             });
             const data = await response.json();
-            var userId = data.user_id;
-            var wallet = data.wallet;
             var authToken = data.authToken;
             this.$emit('trigger-event', { name: 'authenticated', event: { value: authToken } });
+            /*
             //another way to get the wallet:
+            var userId = data.user_id;
+            var wallet = data.wallet;
             var signer = await (new window.ethers.BrowserProvider(web3auth.walletAdapters.openlogin.privateKeyProvider)).getSigner();
             wallet = await signer.getAddress();
+            */
             return data;
         };
 
@@ -205,14 +185,13 @@ export default {
             if (web3auth.connected)
             {
                 try {
-                    //await web3auth.connect();
                     const result = await sendWeb3AuthTokenToXano(web3auth);
                     console.log("Login successful:", result);
                 } catch (error) {
                     console.error("Login failed:", error);
                 }
             }
-            if (oauthToken && oauthVerifier){                
+            else if (oauthToken && oauthVerifier){                
                 try {
                     const jwt = await fetchJWTFromXano(oauthToken, oauthVerifier);
                     await authenticateWithWeb3Auth(web3auth, jwt);
@@ -221,6 +200,11 @@ export default {
                 }
             }
         };
+
+        // Get query parameters
+        let queryParams = getQueryParams(window.location.href);
+        let oauthToken = queryParams['oauth_token'];
+        let oauthVerifier = queryParams['oauth_verifier'];
 
         // Perform actions if both oauth_token and oauth_verifier are set
         if (oauthToken && oauthVerifier) {
@@ -376,7 +360,7 @@ export default {
         xLogin() {
             
             const fetchRequestUrlFromXano = async () => {
-                const response = await fetch('https://xsrr-l2ye-dpbj.f2.xano.io/api:NUVFj-l-:Web3Auth/oauth/twitter/request_token?redirect_uri=' + window.location.href, {
+                const response = await fetch(this.content.xanoApi + '/oauth/twitter/request_token?redirect_uri=' + window.location.href, {
                     method: 'GET'
                 });
                 const data = await response.json();
@@ -404,16 +388,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.ww-button {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    &.button {
-        outline: none;
-        border: none;
-        background: none;
-        font-family: inherit;
-        font-size: inherit;
-    }
-}
 </style>
