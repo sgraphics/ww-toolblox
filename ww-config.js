@@ -35,5 +35,17 @@ export default {
             // },
             /* wwEditor:end */
         },
+        clientId:
+        {
+            label: { en: 'Web3Auth Client Id', fr: 'Web3Auth Client Id' },
+            type: 'Text',
+            section: 'settings',
+            defaultValue: false,
+            bindable: false,
+            options: {
+                placeholder: 'Web3Auth Client Id',
+            },
+            defaultValue: '',
+        },
     },
 };

@@ -98,19 +98,19 @@ export default {
         const initWeb3Auth = async () => {
             const chainConfig = {
                 chainNamespace: window.CHAIN_NAMESPACES.EIP155,
-                chainId: "0x1",
-                displayName: "Ethereum Mainnet",
-                rpcTarget: "https://rpc.ankr.com/eth",
-                blockExplorerUrl: "https://etherscan.io",
+                chainId: "0x2105",
+                displayName: "Base Mainnet",
+                rpcTarget: "https://mainnet.base.org",
+                blockExplorerUrl: "https://base.blockscout.com",
                 ticker: "ETH",
                 tickerName: "Ethereum",
-                logo: "https://web3auth.io/images/web3authlog.png",
+                logo: "https://github.com/base-org/brand-kit/raw/main/logo/in-product/Base_Network_Logo.svg",
             };
 
             const privateKeyProvider = new window.EthereumPrivateKeyProvider({
                 config: { chainConfig },
             });
-            var clientId = "BCD3bVaYA3ZHu3F0bEs6eEyk3OzC1zZvTwkFkFQsiicid-7H4bxyQgBlC9IxCipUYlEbQ1P6ZqBzuDBAMx7svIA";
+            var clientId = this.content.clientId;//"BCD3bVaYA3ZHu3F0bEs6eEyk3OzC1zZvTwkFkFQsiicid-7H4bxyQgBlC9IxCipUYlEbQ1P6ZqBzuDBAMx7svIA";
 
             const web3AuthOptions = {
                 clientId,
@@ -128,7 +128,7 @@ export default {
                     redirectUrl: window.location.href,
                     loginConfig: {
                         jwt: {
-                            name: "Twitter Login", // Display name
+                            name: "X Login", // Display name
                             verifier: "rddtor-verifier",
                             verifierSubIdentifier: "xano-twitter-rddtor-verifier",
                             typeOfLogin: "jwt",
