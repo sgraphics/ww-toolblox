@@ -71,7 +71,7 @@ export default {
             return data.authToken; // Assuming the JWT is in the `token` field
         };
         const fetchGoogleJwtFromXano = async (googleCode) => {
-            const response = await fetch(this.content.xanoGoogleEndpoint + '/oauth/google/continue', {
+            const response = await fetch(this.content.googleEndpoint + '/oauth/google/continue', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -231,7 +231,7 @@ export default {
             // Get the current URL
             const currentUrl = window.location.href;
             // Parameters to remove
-            const paramsToRemove = ['oauth_token', 'oauth_verifier', 'code'];
+            const paramsToRemove = ['oauth_token', 'oauth_verifier', 'code', 'scope'];
             // Get the new URL without the specified parameters
             const newUrl = removeUrlParameters(currentUrl, paramsToRemove);
             // Replace the current history state with the new URL
