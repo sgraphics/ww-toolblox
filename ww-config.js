@@ -45,6 +45,18 @@ export default {
             },
             defaultValue: '',
         },
+        googleEndpoint:
+        {
+            label: { en: 'XANO Google URL' },
+            type: 'Text',
+            section: 'settings',
+            defaultValue: false,
+            bindable: false,
+            options: {
+                placeholder: 'Base url for XANO Google APIs. E.g. "https://xsrr-l2ye-dpbj.f2.xano.io/api:NUVFj-l-"',
+            },
+            defaultValue: '',
+        },
         clientId:
         {
             label: { en: 'Web3Auth Client Id' },
@@ -54,18 +66,6 @@ export default {
             bindable: false,
             options: {
                 placeholder: 'Web3Auth Client Id',
-            },
-            defaultValue: '',
-        },
-        googleClientId:
-        {
-            label: { en: 'Google Client Id' },
-            type: 'Text',
-            section: 'settings',
-            defaultValue: false,
-            bindable: false,
-            options: {
-                placeholder: 'Google Client Id',
             },
             defaultValue: '',
         },

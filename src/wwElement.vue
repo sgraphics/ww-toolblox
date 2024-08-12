@@ -38,10 +38,6 @@ export default {
         /* wwEditor:end */
     },
     emits: [
-        'update:content',
-        'update:content:effect',
-        'change-menu-visibility',
-        'change-borders-style',
         'add-state',
         'remove-state',
         'trigger-event'
@@ -249,6 +245,10 @@ export default {
         tag() {
             return 'div';
         },
+        isAuthenticated()
+        {
+            return web3authGlobal?.connected == true;
+        },
         isFocused() {
             /* wwEditor:start */
             if (this.wwEditorState.isSelected) {
@@ -290,19 +290,31 @@ export default {
         },
         googleLogin()
         {
-            (async function() {                
-                await web3authGlobal.connectTo("openlogin", {
-                    loginProvider: "google",
+            const fetchRequestUrlFromXano = async () => {
+                const response = await fetch(this.content.googleEndpoint + '/oauth/google/init?redirect_uri=' + window.location.href, {
+                    method: 'GET'
                 });
-            })();
+                const data = await response.json();                
+                return data.authUrl;
+            };
+            const startGoogleLogin = async () => {
+                try {
+                    
+                    const authUrl = await fetchRequestUrlFromXano();
+                    
+                    window.location.href = authUrl;
+                } catch (error) {
+                    console.error("Login failed:", error);
+                }
+            };
+            startGoogleLogin();
         },
         xLogin() {
             const fetchRequestUrlFromXano = async () => {
                 const response = await fetch(this.content.xanoXEndpoint + '/oauth/twitter/request_token?redirect_uri=' + window.location.href, {
                     method: 'GET'
                 });
-                const data = await response.json();
-                
+                const data = await response.json();                
                 return data.authUrl;
             };
             const startXLogin = async () => {
