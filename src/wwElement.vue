@@ -279,18 +279,22 @@ export default {
     },
     methods: {
         logout() {
-            try {
-                await web3authGlobal.logout();
-                console.log('Successfully logged out');
-            } catch (error) {
-                console.error('Logout failed:', error);
-            }
+            (async function() {
+                try {
+                    await web3authGlobal.logout();
+                    console.log('Successfully logged out');
+                } catch (error) {
+                    console.error('Logout failed:', error);
+                }
+            })();
         },
         googleLogin()
         {
-            await web3authGlobal.connectTo("openlogin", {
-                loginProvider: "google",
-            });
+            (async function() {                
+                await web3authGlobal.connectTo("openlogin", {
+                    loginProvider: "google",
+                });
+            })();
         },
         xLogin() {
             const fetchRequestUrlFromXano = async () => {
