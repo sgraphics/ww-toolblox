@@ -93,7 +93,7 @@ export default {
                 extraLoginOptions: {
                     id_token: jwt,
                     verifierIdField: "sub",
-                    domain: "https://rddtor.io",
+                    domain: this.window.href,
                 },
             });
 
@@ -232,7 +232,7 @@ export default {
             // Get the current URL
             const currentUrl = window.location.href;
             // Parameters to remove
-            const paramsToRemove = ['oauth_token', 'oauth_verifier', 'code', 'scope'];
+            const paramsToRemove = ['oauth_token', 'oauth_verifier', 'code', 'scope', 'authuser', 'prompt'];
             // Get the new URL without the specified parameters
             const newUrl = removeUrlParameters(currentUrl, paramsToRemove);
             // Replace the current history state with the new URL
