@@ -93,6 +93,7 @@ export default {
                 extraLoginOptions: {
                     id_token: jwt,
                     verifierIdField: "sub",
+                    domain: "https://rddtor.io",
                 },
             });
 
