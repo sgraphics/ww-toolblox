@@ -10,7 +10,11 @@ export default {
         icon: 'cursor-click',
     },
     states: ['focus', 'disabled'],
-    actions: [{ label: 'Start X.com login', action: 'xLogin' }],
+    actions: [
+        { label: 'Start X login', action: 'xLogin' },
+        { label: 'Logout', action: 'logout' },
+        { label: 'Start Google login', action: 'googleLogin' },
+    ],
     triggerEvents: [
         { name: 'focus', label: { en: 'On focus' }, event: null },
         { name: 'authenticated', label: { en: 'On authenticated' }, event: { value: '' } },

@@ -3,6 +3,7 @@
 </template>
 
 <script>
+let web3authGlobal = {};
 window.web3Initialized = false;
 /* wwEditor:start */
 // if (window.Web3AuthNoModal == null || window.Web3AuthNoModal == undefined) {
@@ -76,24 +77,17 @@ export default {
 
         // Define the function to authenticate with Web3Auth
         const authenticateWithWeb3Auth = async (web3auth, jwt) => {
-            try {
-                await web3auth.logout();
-                console.log('Successfully logged out');
-            } catch (error) {
-                console.error('Logout failed:', error);
-            }
-
             await web3auth.connectTo("openlogin", {
                 loginProvider: "jwt",
                 extraLoginOptions: {
                     id_token: jwt,
                     verifierIdField: "sub",
-                    domain: "https://your-domain.com", // Your domain if required
                 },
             });
 
             return web3auth;
         };
+        
         // Define the function to authenticate with Web3Auth
         const initWeb3Auth = async () => {
             const chainConfig = {
@@ -119,20 +113,27 @@ export default {
             };
 
             const web3auth = new window.Web3AuthNoModal(web3AuthOptions);
-
+            web3authGlobal = web3auth;
             const openloginAdapter = new window.OpenloginAdapter({
                 adapterSettings: {
-                    clientId: clientId, // Replace with your Web3Auth client ID
-                    network: "sapphire_devnet", // Ensure this matches your network
+                    clientId: clientId,
+                    network: "sapphire_devnet",
                     uxMode: "redirect",
                     redirectUrl: window.location.href,
                     loginConfig: {
                         jwt: {
-                            name: "X Login", // Display name
+                            name: "X Login",
                             verifier: "rddtor-verifier",
                             verifierSubIdentifier: "xano-twitter-rddtor-verifier",
                             typeOfLogin: "jwt",
                             clientId: clientId,
+                        },
+                        google: {
+                            name: "Google Login",
+                            verifier: "rddtor-verifier",
+                            verifierSubIdentifier: "google-rddtor-verifier",
+                            typeOfLogin: "google",
+                            clientId: this.content.googleClientId,
                         },
                     },
                 },
@@ -277,8 +278,21 @@ export default {
         },
     },
     methods: {
+        logout() {
+            try {
+                await web3authGlobal.logout();
+                console.log('Successfully logged out');
+            } catch (error) {
+                console.error('Logout failed:', error);
+            }
+        },
+        googleLogin()
+        {
+            await web3authGlobal.connectTo("openlogin", {
+                loginProvider: "google",
+            });
+        },
         xLogin() {
-            
             const fetchRequestUrlFromXano = async () => {
                 const response = await fetch(this.content.xanoXEndpoint + '/oauth/twitter/request_token?redirect_uri=' + window.location.href, {
                     method: 'GET'
@@ -287,7 +301,6 @@ export default {
                 
                 return data.authUrl;
             };
-
             const startXLogin = async () => {
                 try {
                     
