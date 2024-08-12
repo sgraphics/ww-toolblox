@@ -55,7 +55,7 @@ export default {
             }
             return params;
         }
-        const fetchJWTFromXano = async (oauthToken, oauthVerifier) => {
+        const fetchXJwtFromXano = async (oauthToken, oauthVerifier) => {
             const response = await fetch(this.content.xanoXEndpoint + '/oauth/twitter/access_token', {
                 method: 'POST',
                 headers: {
@@ -64,6 +64,21 @@ export default {
                 body: JSON.stringify({
                     oauth_token: oauthToken,
                     oauth_verifier: oauthVerifier
+                })
+            });
+            const data = await response.json();
+            //alert(JSON.stringify(data));
+            return data.authToken; // Assuming the JWT is in the `token` field
+        };
+        const fetchGoogleJwtFromXano = async (googleCode) => {
+            const response = await fetch(this.content.xanoGoogleEndpoint + '/oauth/google/continue', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    code: googleCode,
+                    redirect_uri: window.location.href
                 })
             });
             const data = await response.json();
@@ -170,7 +185,7 @@ export default {
         };
 
         // Main async function to handle the login process
-        const handleLogin = async (oauthToken, oauthVerifier) => {
+        const handleLogin = async (oauthToken, oauthVerifier, googleCode) => {
             await window.initComplete;
             const web3auth = await initWeb3Auth();
             if (web3auth.connected)
@@ -184,7 +199,15 @@ export default {
             }
             else if (oauthToken && oauthVerifier){                
                 try {
-                    const jwt = await fetchJWTFromXano(oauthToken, oauthVerifier);
+                    const jwt = await fetchXJwtFromXano(oauthToken, oauthVerifier);
+                    await authenticateWithWeb3Auth(web3auth, jwt);
+                } catch (error) {
+                    console.error("Starting login failed:", error);
+                }
+            }
+            else if (googleCode){                
+                try {
+                    const jwt = await fetchGoogleJwtFromXano(googleCode);
                     await authenticateWithWeb3Auth(web3auth, jwt);
                 } catch (error) {
                     console.error("Starting login failed:", error);
@@ -196,9 +219,10 @@ export default {
         let queryParams = getQueryParams(window.location.href);
         let oauthToken = queryParams['oauth_token'];
         let oauthVerifier = queryParams['oauth_verifier'];
+        let code = queryParams['code'];
 
         // Perform actions if both oauth_token and oauth_verifier are set
-        if (oauthToken && oauthVerifier) {
+        if (oauthToken || oauthVerifier || code) {
             function removeUrlParameters(url, parameters) {
                 let urlObj = new URL(url);
                 parameters.forEach(param => urlObj.searchParams.delete(param));
@@ -207,7 +231,7 @@ export default {
             // Get the current URL
             const currentUrl = window.location.href;
             // Parameters to remove
-            const paramsToRemove = ['oauth_token', 'oauth_verifier'];
+            const paramsToRemove = ['oauth_token', 'oauth_verifier', 'code'];
             // Get the new URL without the specified parameters
             const newUrl = removeUrlParameters(currentUrl, paramsToRemove);
             // Replace the current history state with the new URL
@@ -216,7 +240,7 @@ export default {
         if (window.web3Initialized == false)
         {
             window.web3Initialized = true;
-            handleLogin(oauthToken, oauthVerifier);
+            handleLogin(oauthToken, oauthVerifier, code);
         }
 
         // /* wwEditor:start */
