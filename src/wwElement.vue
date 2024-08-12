@@ -93,7 +93,7 @@ export default {
                 extraLoginOptions: {
                     id_token: jwt,
                     verifierIdField: "sub",
-                    domain: this.window.href,
+                    domain: window.location.href,
                 },
             });
 
