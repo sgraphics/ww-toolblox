@@ -4,6 +4,7 @@
 
 <script>
 let web3authGlobal = {};
+let authTokenGlobal = {};
 window.web3Initialized = false;
 /* wwEditor:start */
 // if (window.Web3AuthNoModal == null || window.Web3AuthNoModal == undefined) {
@@ -59,7 +60,8 @@ export default {
             const response = await fetch(this.content.xanoXEndpoint + '/oauth/twitter/access_token', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${authTokenGlobal}`,
                 },
                 body: JSON.stringify({
                     oauth_token: oauthToken,
@@ -74,7 +76,8 @@ export default {
             const response = await fetch(this.content.googleEndpoint + '/oauth/google/continue', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${authTokenGlobal}`,
                 },
                 body: JSON.stringify({
                     code: googleCode,
@@ -174,6 +177,7 @@ export default {
             });
             const data = await response.json();
             var authToken = data.authToken;
+            authTokenGlobal = authToken;
             this.$emit('trigger-event', { name: 'authenticated', event: { value: authToken } });
             /*
             //another way to get the wallet:
@@ -189,16 +193,7 @@ export default {
         const handleLogin = async (oauthToken, oauthVerifier, googleCode) => {
             await window.initComplete;
             const web3auth = await initWeb3Auth();
-            if (web3auth.connected)
-            {
-                try {
-                    const result = await sendWeb3AuthTokenToXano(web3auth);
-                    console.log("Login successful:", result);
-                } catch (error) {
-                    console.error("Login failed:", error);
-                }
-            }
-            else if (oauthToken && oauthVerifier){                
+            if (oauthToken && oauthVerifier){                
                 try {
                     const jwt = await fetchXJwtFromXano(oauthToken, oauthVerifier);
                     await authenticateWithWeb3Auth(web3auth, jwt);
@@ -212,6 +207,15 @@ export default {
                     await authenticateWithWeb3Auth(web3auth, jwt);
                 } catch (error) {
                     console.error("Starting login failed:", error);
+                }
+            }
+            else if (web3auth.connected)
+            {
+                try {
+                    const result = await sendWeb3AuthTokenToXano(web3auth);
+                    console.log("Login successful:", result);
+                } catch (error) {
+                    console.error("Login failed:", error);
                 }
             }
         };
