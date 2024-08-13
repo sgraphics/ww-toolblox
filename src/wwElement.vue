@@ -4,7 +4,7 @@
 
 <script>
 let web3authGlobal = {};
-let authTokenGlobal = {};
+let authTokenGlobal = "";
 window.web3Initialized = false;
 /* wwEditor:start */
 // if (window.Web3AuthNoModal == null || window.Web3AuthNoModal == undefined) {
