@@ -60,7 +60,7 @@ export default {
             if (web3authGlobal?.connected == true)
             {
                 //connect X to login
-                const response = await fetch(this.content.xanoXEndpoint + '/oauth/twitter/connect', {
+                await fetch(this.content.xanoXEndpoint + '/oauth/twitter/connect', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -71,8 +71,7 @@ export default {
                         oauth_verifier: oauthVerifier
                     })
                 });
-                const data = await response.json();
-                return data?.authToken; // Assuming the JWT is in the `token` field
+                return "";
             }else{      
                 //login with X          
                 const response = await fetch(this.content.xanoXEndpoint + '/oauth/twitter/access_token', {
