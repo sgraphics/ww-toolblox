@@ -57,27 +57,43 @@ export default {
             return params;
         }
         const fetchXJwtFromXano = async (oauthToken, oauthVerifier) => {
-            const response = await fetch(this.content.xanoXEndpoint + '/oauth/twitter/access_token', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${authTokenGlobal}`,
-                },
-                body: JSON.stringify({
-                    oauth_token: oauthToken,
-                    oauth_verifier: oauthVerifier
-                })
-            });
-            const data = await response.json();
-            //alert(JSON.stringify(data));
-            return data.authToken; // Assuming the JWT is in the `token` field
+            if (web3authGlobal?.connected == true)
+            {
+                //connect X to login
+                const response = await fetch(this.content.xanoXEndpoint + '/oauth/twitter/connect', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authTokenGlobal}`,
+                    },
+                    body: JSON.stringify({
+                        oauth_token: oauthToken,
+                        oauth_verifier: oauthVerifier
+                    })
+                });
+                const data = await response.json();
+                return data?.authToken; // Assuming the JWT is in the `token` field
+            }else{      
+                //login with X          
+                const response = await fetch(this.content.xanoXEndpoint + '/oauth/twitter/access_token', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        oauth_token: oauthToken,
+                        oauth_verifier: oauthVerifier
+                    })
+                });
+                const data = await response.json();
+                return data.authToken; // Assuming the JWT is in the `token` field
+            }
         };
         const fetchGoogleJwtFromXano = async (googleCode) => {
             const response = await fetch(this.content.googleEndpoint + '/oauth/google/continue', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${authTokenGlobal}`,
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
                     code: googleCode,
@@ -313,22 +329,12 @@ export default {
     methods: {
         logout() {
             (async function() {
-                // try {
-                //     await web3authGlobal.logout();
-                //     console.log('Successfully logged out');
-                // } catch (error) {
-                //     console.error('Logout failed:', error);
-                // }
-                
-                const response = await fetch('https://xsrr-l2ye-dpbj.f2.xano.io/api:zQykoo4c/user/testconditional', {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${authTokenGlobal}`,
-                    }
-                });
-                const data = await response.json();
-                console.log(JSON.stringify(data));
+                try {
+                    await web3authGlobal.logout();
+                    console.log('Successfully logged out');
+                } catch (error) {
+                    console.error('Logout failed:', error);
+                }
             })();
         },
         googleLogin()
