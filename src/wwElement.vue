@@ -202,7 +202,6 @@ export default {
                     console.error("Login failed:", error);
                 }
             }
-
             //Do NOT use "else if" here. Need to authenticate to be able to add login to existing user.
             if (oauthToken && oauthVerifier){                
                 try {
