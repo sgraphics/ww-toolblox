@@ -195,6 +195,7 @@ export default {
             const web3auth = await initWeb3Auth();
             if (web3auth.connected)
             {
+                
                 try {
                     const result = await sendWeb3AuthTokenToXano(web3auth);
                     console.log("Login successful:", result);
