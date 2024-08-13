@@ -193,6 +193,17 @@ export default {
         const handleLogin = async (oauthToken, oauthVerifier, googleCode) => {
             await window.initComplete;
             const web3auth = await initWeb3Auth();
+            if (web3auth.connected)
+            {
+                try {
+                    const result = await sendWeb3AuthTokenToXano(web3auth);
+                    console.log("Login successful:", result);
+                } catch (error) {
+                    console.error("Login failed:", error);
+                }
+            }
+
+            //Do NOT use "else if" here. Need to authenticate to be able to add login to existing user.
             if (oauthToken && oauthVerifier){                
                 try {
                     const jwt = await fetchXJwtFromXano(oauthToken, oauthVerifier);
@@ -207,15 +218,6 @@ export default {
                     await authenticateWithWeb3Auth(web3auth, jwt);
                 } catch (error) {
                     console.error("Starting login failed:", error);
-                }
-            }
-            else if (web3auth.connected)
-            {
-                try {
-                    const result = await sendWeb3AuthTokenToXano(web3auth);
-                    console.log("Login successful:", result);
-                } catch (error) {
-                    console.error("Login failed:", error);
                 }
             }
         };
