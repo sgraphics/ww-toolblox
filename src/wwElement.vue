@@ -91,15 +91,17 @@ export default {
 
         // Define the function to authenticate with Web3Auth
         const authenticateWithWeb3Auth = async (web3auth, jwt) => {
-            await web3auth.connectTo("openlogin", {
-                loginProvider: "jwt",
-                extraLoginOptions: {
-                    id_token: jwt,
-                    verifierIdField: "sub",
-                    domain: window.location.href,
-                },
-            });
-
+            if (!web3auth.connected)
+            {
+                await web3auth.connectTo("openlogin", {
+                    loginProvider: "jwt",
+                    extraLoginOptions: {
+                        id_token: jwt,
+                        verifierIdField: "sub",
+                        domain: window.location.href,
+                    },
+                });
+            }
             return web3auth;
         };
         
@@ -195,7 +197,7 @@ export default {
             const web3auth = await initWeb3Auth();
             if (web3auth.connected)
             {
-                
+
                 try {
                     const result = await sendWeb3AuthTokenToXano(web3auth);
                     console.log("Login successful:", result);
@@ -311,12 +313,22 @@ export default {
     methods: {
         logout() {
             (async function() {
-                try {
-                    await web3authGlobal.logout();
-                    console.log('Successfully logged out');
-                } catch (error) {
-                    console.error('Logout failed:', error);
-                }
+                // try {
+                //     await web3authGlobal.logout();
+                //     console.log('Successfully logged out');
+                // } catch (error) {
+                //     console.error('Logout failed:', error);
+                // }
+                
+                const response = await fetch('https://xsrr-l2ye-dpbj.f2.xano.io/api:zQykoo4c/user/testconditional', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authTokenGlobal}`,
+                    }
+                });
+                const data = await response.json();
+                console.log(JSON.stringify(data));
             })();
         },
         googleLogin()
