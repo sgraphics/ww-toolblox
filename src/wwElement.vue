@@ -178,11 +178,8 @@ export default {
                 ["8453"],
                 "2cd3e1e1f6ec166a75c2bae99f14df66",
             );
-            const walletConnectModal = new WalletConnectModal({
-                projectId: "2cd3e1e1f6ec166a75c2bae99f14df66",
-            });
             const walletConnectV2Adapter = new WalletConnectV2Adapter({
-                adapterSettings: { qrcodeModal: walletConnectModal, ...defaultWcSettings.adapterSettings },
+                adapterSettings: { ...defaultWcSettings.adapterSettings },
                 loginSettings: { ...defaultWcSettings.loginSettings },
             });
             
