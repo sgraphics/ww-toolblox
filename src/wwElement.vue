@@ -172,7 +172,22 @@ export default {
             });
 
             web3auth.configureAdapter(openloginAdapter);
+        
+            const defaultWcSettings = await getWalletConnectV2Settings(
+                "eip155",
+                ["8453"],
+                "2cd3e1e1f6ec166a75c2bae99f14df66",
+            );
+            const walletConnectModal = new WalletConnectModal({
+                projectId: "2cd3e1e1f6ec166a75c2bae99f14df66",
+            });
+            const walletConnectV2Adapter = new WalletConnectV2Adapter({
+                adapterSettings: { qrcodeModal: walletConnectModal, ...defaultWcSettings.adapterSettings },
+                loginSettings: { ...defaultWcSettings.loginSettings },
+            });
             
+            web3auth.configureAdapter(walletConnectV2Adapter);
+        
             await web3auth.init();
 
             return web3auth;
@@ -376,6 +391,15 @@ export default {
                 }
             };
             startXLogin();
+        },
+        walletLogin() {
+            const startWalletLogin = async () => {
+                if (!web3authGlobal.connected)
+                {
+                    await web3authGlobal.connectTo(window.WALLET_ADAPTERS.WALLET_CONNECT_V2);
+                }
+            };
+            startWalletLogin();
         },
         onBlur() {
             this.isReallyFocused = false;
