@@ -255,7 +255,7 @@ export default {
             // Get the current URL
             const currentUrl = window.location.href;
             // Parameters to remove
-            const paramsToRemove = ['oauth_token', 'oauth_verifier', 'code', 'scope', 'authuser', 'prompt'];
+            const paramsToRemove = ['oauth_token', 'oauth_verifier', 'code', 'scope', 'authuser', 'prompt', 'hd'];
             // Get the new URL without the specified parameters
             const newUrl = removeUrlParameters(currentUrl, paramsToRemove);
             // Replace the current history state with the new URL
