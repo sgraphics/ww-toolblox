@@ -351,6 +351,10 @@ export default {
         },
         googleLogin()
         {
+            if (web3authGlobal.connected)
+            {
+                return;
+            }
             const fetchRequestUrlFromXano = async () => {
                 const response = await fetch(this.content.googleEndpoint + '/oauth/google/init?redirect_uri=' + window.location.href, {
                     method: 'GET'
@@ -371,6 +375,7 @@ export default {
             startGoogleLogin();
         },
         xLogin() {
+            //Do not check if connected because we want to start the login process to connect to X to fetch X username
             const fetchRequestUrlFromXano = async () => {
                 const response = await fetch(this.content.xanoXEndpoint + '/oauth/twitter/request_token?redirect_uri=' + window.location.href, {
                     method: 'GET'
@@ -380,9 +385,7 @@ export default {
             };
             const startXLogin = async () => {
                 try {
-                    
-                    const authUrl = await fetchRequestUrlFromXano();
-                    
+                    const authUrl = await fetchRequestUrlFromXano();                    
                     window.location.href = authUrl;
                 } catch (error) {
                     console.error("Login failed:", error);
