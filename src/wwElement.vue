@@ -139,13 +139,12 @@ export default {
         const initWeb3Auth = async () => {
             const chainConfig = {
                 chainNamespace: window.CHAIN_NAMESPACES.EIP155,
-                chainId: "0x2105",
-                displayName: "Base Mainnet",
-                rpcTarget: "https://mainnet.base.org",
-                blockExplorerUrl: "https://base.blockscout.com",
-                ticker: "ETH",
-                tickerName: "Ethereum",
-                logo: "https://github.com/base-org/brand-kit/raw/main/logo/in-product/Base_Network_Logo.svg",
+    chainId: "0x1",
+    rpcTarget: "https://rpc.ankr.com/eth",
+    displayName: "Ethereum Mainnet",
+    blockExplorer: "https://etherscan.io",
+    ticker: "ETH",
+    tickerName: "Ethereum"
             };
 
             const privateKeyProvider = new window.EthereumPrivateKeyProvider({
