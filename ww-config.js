@@ -71,5 +71,17 @@ export default {
             },
             defaultValue: '',
         },
+        walletConnectProjectId:
+        {
+            label: { en: 'Wallet Connect Project Id' },
+            type: 'Text',
+            section: 'settings',
+            defaultValue: false,
+            bindable: false,
+            options: {
+                placeholder: 'Wallet Connect Project Id',
+            },
+            defaultValue: '',
+        },
     },
 };

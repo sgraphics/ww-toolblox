@@ -194,10 +194,10 @@ export default {
             const defaultWcSettings = await getWalletConnectV2Settings(
                 "eip155",
                 ["8453"],
-                "2cd3e1e1f6ec166a75c2bae99f14df66",
+                this.content.walletConnectProjectId,
             );
             const walletConnectModal = new WalletConnectModal({
-                projectId: "2cd3e1e1f6ec166a75c2bae99f14df66",
+                projectId: this.content.walletConnectProjectId,
             });
             const walletConnectV2Adapter = new WalletConnectV2Adapter({
                 adapterSettings: { qrcodeModal: walletConnectModal, ...defaultWcSettings.adapterSettings },
