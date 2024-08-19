@@ -235,14 +235,8 @@ export default {
             //Metamask
             const metamaskAdapter = new MetamaskAdapter({
                 clientId,
-                sessionTime: 3600, // 1 hour in seconds
-                web3AuthNetwork: window.WEB3AUTH_NETWORK.SAPPHIRE_DEVNET,
-                chainConfig: {
-                    chainNamespace: CHAIN_NAMESPACES.EIP155,
-                    chainId: "0x2105",
-                    blockExplorerUrl: "https://base.blockscout.com",
-                    rpcTarget: "https://mainnet.base.org", // This is the public RPC we have added, please pass on your own endpoint while creating an app
-                },
+                sessionTime: 86400, // 1 hour in seconds
+                web3AuthNetwork: window.WEB3AUTH_NETWORK.SAPPHIRE_DEVNET
                 });
             web3auth.configureAdapter(metamaskAdapter);
         
