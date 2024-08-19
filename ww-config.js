@@ -12,6 +12,7 @@ export default {
     states: ['focus', 'disabled'],
     actions: [
         { label: 'Start X login', action: 'xLogin' },
+        { label: 'Start Metamask login', action: 'metamaskLogin' },
         { label: 'Start wallet login', action: 'walletLogin' },
         { label: 'Logout', action: 'logout' },
         { label: 'Start Google login', action: 'googleLogin' },

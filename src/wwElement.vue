@@ -10,16 +10,31 @@ window.web3Initialized = false;
 // if (window.Web3AuthNoModal == null || window.Web3AuthNoModal == undefined) {
 //   (async () => {
 //     try {
-//       const { Web3AuthNoModal } = await import('@web3auth/no-modal');
-//       const { EthereumPrivateKeyProvider } = await import('@web3auth/ethereum-provider');
-//       const { OpenloginAdapter } = await import('@web3auth/openlogin-adapter');
-//       const { CHAIN_NAMESPACES, WEB3AUTH_NETWORK } = await import('@web3auth/base');
+/*
+        import { WalletConnectModal } from "@walletconnect/modal";
+        import {
+        getWalletConnectV2Settings,
+        WalletConnectV2Adapter,
+        } from "@web3auth/wallet-connect-v2-adapter";
+        import { Web3AuthNoModal } from '@web3auth/no-modal';
+        import { EthereumPrivateKeyProvider } from "@web3auth/ethereum-provider";
+        import { CHAIN_NAMESPACES, WEB3AUTH_NETWORK, WALLET_ADAPTERS } from "@web3auth/base";
+        import { OpenloginAdapter } from '@web3auth/openlogin-adapter';
+        import { ethers } from "ethers";
+        import { MetamaskAdapter } from "@web3auth/metamask-adapter";
 
-//       window.Web3AuthNoModal = Web3AuthNoModal;
-//       window.EthereumPrivateKeyProvider = EthereumPrivateKeyProvider;
-//       window.CHAIN_NAMESPACES = CHAIN_NAMESPACES;
-//       window.WEB3AUTH_NETWORK = WEB3AUTH_NETWORK;
-//       window.OpenloginAdapter = OpenloginAdapter;
+        window.getWalletConnectV2Settings = getWalletConnectV2Settings;
+        window.WalletConnectV2Adapter = WalletConnectV2Adapter;
+        window.WalletConnectModal = WalletConnectModal;
+        window.Web3AuthNoModal = Web3AuthNoModal;
+        window.EthereumPrivateKeyProvider = EthereumPrivateKeyProvider;
+        window.CHAIN_NAMESPACES = CHAIN_NAMESPACES;
+        window.WEB3AUTH_NETWORK = WEB3AUTH_NETWORK;
+        window.WALLET_ADAPTERS = WALLET_ADAPTERS;
+        window.OpenloginAdapter = OpenloginAdapter;
+        window.ethers = ethers;
+        window.MetamaskAdapter = MetamaskAdapter;
+*/
 //     } catch (err) {
 //       //console.error('Failed to load Web3Auth modules', err);
 //     }
@@ -146,10 +161,12 @@ export default {
 
             const web3auth = new window.Web3AuthNoModal(web3AuthOptions);
             web3authGlobal = web3auth;
+
+            //OpenLogin
             const openloginAdapter = new window.OpenloginAdapter({
                 adapterSettings: {
                     clientId: clientId,
-                    network: "sapphire_devnet",
+                    network: window.WEB3AUTH_NETWORK.SAPPHIRE_DEVNET,
                     uxMode: "redirect",
                     redirectUrl: window.location.href,
                     loginConfig: {
@@ -173,17 +190,34 @@ export default {
 
             web3auth.configureAdapter(openloginAdapter);
         
+            //Wallet Connect
             const defaultWcSettings = await getWalletConnectV2Settings(
                 "eip155",
                 ["8453"],
                 "2cd3e1e1f6ec166a75c2bae99f14df66",
             );
+            const walletConnectModal = new WalletConnectModal({
+                projectId: "2cd3e1e1f6ec166a75c2bae99f14df66",
+            });
             const walletConnectV2Adapter = new WalletConnectV2Adapter({
-                adapterSettings: { ...defaultWcSettings.adapterSettings },
+                adapterSettings: { qrcodeModal: walletConnectModal, ...defaultWcSettings.adapterSettings },
                 loginSettings: { ...defaultWcSettings.loginSettings },
             });
             
             web3auth.configureAdapter(walletConnectV2Adapter);
+
+            //Metamask
+            const metamaskAdapter = new MetamaskAdapter({
+                clientId,
+                sessionTime: 3600, // 1 hour in seconds
+                web3AuthNetwork: window.WEB3AUTH_NETWORK.SAPPHIRE_DEVNET,
+                chainConfig: {
+                    chainNamespace: CHAIN_NAMESPACES.EIP155,
+                    chainId: "0x2105",
+                    rpcTarget: "https://mainnet.base.org", // This is the public RPC we have added, please pass on your own endpoint while creating an app
+                },
+                });
+            web3auth.configureAdapter(metamaskAdapter);
         
             await web3auth.init();
 
@@ -397,6 +431,15 @@ export default {
                 }
             };
             startWalletLogin();
+        },
+        metamaskLogin() {
+            const startMetamaskLogin = async () => {
+                if (!web3authGlobal.connected)
+                {
+                    await web3authGlobal.connectTo(window.WALLET_ADAPTERS.METAMASK);
+                }
+            };
+            startMetamaskLogin();
         },
         onBlur() {
             this.isReallyFocused = false;
