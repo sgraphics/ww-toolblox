@@ -6,6 +6,32 @@
 let web3authGlobal = {};
 let authTokenGlobal = "";
 window.web3Initialized = false;
+const sendWeb3AuthTokenToXano = async (web3auth) => {
+    const authenticationResult = await web3auth.authenticateUser();
+    
+    const web3authToken = authenticationResult.idToken;
+    const response = await fetch(this.content.xanoWeb3AuthEndpoint + '/oauth/web3auth/authenticate', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            token: web3authToken
+        })
+    });
+    const data = await response.json();
+    var authToken = data.authToken;
+    authTokenGlobal = authToken;
+    this.$emit('trigger-event', { name: 'authenticated', event: { value: authToken } });
+    /*
+    //another way to get the wallet:
+    var userId = data.user_id;
+    var wallet = data.wallet;
+    var signer = await (new window.ethers.BrowserProvider(web3auth.walletAdapters.openlogin.privateKeyProvider)).getSigner();
+    wallet = await signer.getAddress();
+    */
+    return data;
+};
 /* wwEditor:start */
 // if (window.Web3AuthNoModal == null || window.Web3AuthNoModal == undefined) {
 //   (async () => {
@@ -214,6 +240,7 @@ export default {
                 chainConfig: {
                     chainNamespace: CHAIN_NAMESPACES.EIP155,
                     chainId: "0x2105",
+                    blockExplorerUrl: "https://base.blockscout.com",
                     rpcTarget: "https://mainnet.base.org", // This is the public RPC we have added, please pass on your own endpoint while creating an app
                 },
                 });
@@ -222,34 +249,6 @@ export default {
             await web3auth.init();
 
             return web3auth;
-        };
-
-        // Define the function to send the Web3Auth token to Xano
-        const sendWeb3AuthTokenToXano = async (web3auth) => {
-            const authenticationResult = await web3auth.authenticateUser();
-            
-            const web3authToken = authenticationResult.idToken;
-            const response = await fetch(this.content.xanoWeb3AuthEndpoint + '/oauth/web3auth/authenticate', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    token: web3authToken
-                })
-            });
-            const data = await response.json();
-            var authToken = data.authToken;
-            authTokenGlobal = authToken;
-            this.$emit('trigger-event', { name: 'authenticated', event: { value: authToken } });
-            /*
-            //another way to get the wallet:
-            var userId = data.user_id;
-            var wallet = data.wallet;
-            var signer = await (new window.ethers.BrowserProvider(web3auth.walletAdapters.openlogin.privateKeyProvider)).getSigner();
-            wallet = await signer.getAddress();
-            */
-            return data;
         };
 
         // Main async function to handle the login process
@@ -437,6 +436,10 @@ export default {
                 if (!web3authGlobal.connected)
                 {
                     await web3authGlobal.connectTo(window.WALLET_ADAPTERS.METAMASK);
+                    if (web3authGlobal.connected)
+                    {
+                        await sendWeb3AuthTokenToXano(web3authGlobal);
+                    }
                 }
             };
             startMetamaskLogin();
