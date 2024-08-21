@@ -138,29 +138,24 @@ export default {
         
         // Define the function to authenticate with Web3Auth
         const initWeb3Auth = async () => {
-const chainConfig = {
+        const chainConfig = {
     chainNamespace: window.CHAIN_NAMESPACES.EIP155,
-    chainId: "0x2105",
-    displayName: "Base Mainnet",
-    rpcTarget: "https://mainnet.base.org",
-    blockExplorerUrl: "https://base.blockscout.com",
-    ticker: "ETH",
-    tickerName: "Ethereum",
-    logo: "https://github.com/base-org/brand-kit/raw/main/logo/in-product/Base_Network_Logo.svg",
-};
+    chainId: "0x1",
+    rpcTarget: "https://rpc.ankr.com/eth", // This is the public RPC we have added, please pass on your own endpoint while creating an app
+  };
 
-const privateKeyProvider = new window.EthereumPrivateKeyProvider({
-    config: { chainConfig },
-});
-var clientId = this.content.clientId;
+        const privateKeyProvider = new window.EthereumPrivateKeyProvider({
+            config: { chainConfig },
+        });
+        var clientId = this.content.clientId;
 
-const web3AuthOptions = {
-    clientId,
-    web3AuthNetwork: window.WEB3AUTH_NETWORK.SAPPHIRE_DEVNET,
-    privateKeyProvider,
-};
+        const web3AuthOptions = {
+            clientId,
+            web3AuthNetwork: window.WEB3AUTH_NETWORK.SAPPHIRE_DEVNET,
+            privateKeyProvider,
+        };
 
-const web3auth = new window.Web3AuthNoModal(web3AuthOptions);
+        const web3auth = new window.Web3AuthNoModal(web3AuthOptions);
             web3authGlobal = web3auth;
 
             //OpenLogin
