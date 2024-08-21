@@ -138,29 +138,29 @@ export default {
         
         // Define the function to authenticate with Web3Auth
         const initWeb3Auth = async () => {
-            const chainConfig = {
-                chainNamespace: window.CHAIN_NAMESPACES.EIP155,
-                chainId: "0x2105",
-                displayName: "Base Mainnet",
-                rpcTarget: "https://mainnet.base.org",
-                blockExplorerUrl: "https://base.blockscout.com",
-                ticker: "ETH",
-                tickerName: "Ethereum",
-                logo: "https://github.com/base-org/brand-kit/raw/main/logo/in-product/Base_Network_Logo.svg",
-            };
+const chainConfig = {
+    chainNamespace: window.CHAIN_NAMESPACES.EIP155,
+    chainId: "0x2105",
+    displayName: "Base Mainnet",
+    rpcTarget: "https://mainnet.base.org",
+    blockExplorerUrl: "https://base.blockscout.com",
+    ticker: "ETH",
+    tickerName: "Ethereum",
+    logo: "https://github.com/base-org/brand-kit/raw/main/logo/in-product/Base_Network_Logo.svg",
+};
 
-            const privateKeyProvider = new window.EthereumPrivateKeyProvider({
-                config: { chainConfig },
-            });
-            var clientId = this.content.clientId;
+const privateKeyProvider = new window.EthereumPrivateKeyProvider({
+    config: { chainConfig },
+});
+var clientId = this.content.clientId;
 
-            const web3AuthOptions = {
-                clientId,
-                web3AuthNetwork: window.WEB3AUTH_NETWORK.SAPPHIRE_DEVNET,
-                privateKeyProvider,
-            };
+const web3AuthOptions = {
+    clientId,
+    web3AuthNetwork: window.WEB3AUTH_NETWORK.SAPPHIRE_DEVNET,
+    privateKeyProvider,
+};
 
-            const web3auth = new window.Web3AuthNoModal(web3AuthOptions);
+const web3auth = new window.Web3AuthNoModal(web3AuthOptions);
             web3authGlobal = web3auth;
 
             //OpenLogin
@@ -214,7 +214,7 @@ export default {
                 web3AuthNetwork: window.WEB3AUTH_NETWORK.SAPPHIRE_DEVNET
                 });
             web3auth.configureAdapter(metamaskAdapter);
-            
+
 
             const coinbaseAdapter = new CoinbaseAdapter({
                 clientId: this.content.coinbaseProjectId,
@@ -407,6 +407,10 @@ export default {
                 if (!web3authGlobal.connected)
                 {
                     await web3authGlobal.connectTo(window.WALLET_ADAPTERS.WALLET_CONNECT_V2);
+                    if (web3authGlobal.connected)
+                    {
+                        await this.sendWeb3AuthTokenToXano(web3authGlobal);
+                    }
                 }
             };
             startWalletLogin();
