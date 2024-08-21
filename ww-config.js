@@ -16,6 +16,7 @@ export default {
         { label: 'Start wallet login', action: 'walletLogin' },
         { label: 'Logout', action: 'logout' },
         { label: 'Start Google login', action: 'googleLogin' },
+        { label: 'Start Coinbase login', action: 'coinbaseLogin' },
     ],
     triggerEvents: [
         { name: 'focus', label: { en: 'On focus' }, event: null },
@@ -80,6 +81,18 @@ export default {
             bindable: false,
             options: {
                 placeholder: 'Wallet Connect Project Id',
+            },
+            defaultValue: '',
+        },
+        coinbaseProjectId:
+        {
+            label: { en: 'Coinbase Project Id' },
+            type: 'Text',
+            section: 'settings',
+            defaultValue: false,
+            bindable: false,
+            options: {
+                placeholder: 'Coinbase Project Id',
             },
             defaultValue: '',
         },

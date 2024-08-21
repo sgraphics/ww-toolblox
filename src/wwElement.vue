@@ -12,6 +12,7 @@ window.web3Initialized = false;
 //     try {
 /*
         import { WalletConnectModal } from "@walletconnect/modal";
+        import { CoinbaseAdapter } from "@web3auth/coinbase-adapter";
         import {
         getWalletConnectV2Settings,
         WalletConnectV2Adapter,
@@ -139,12 +140,13 @@ export default {
         const initWeb3Auth = async () => {
             const chainConfig = {
                 chainNamespace: window.CHAIN_NAMESPACES.EIP155,
-    chainId: "0x1",
-    rpcTarget: "https://rpc.ankr.com/eth",
-    displayName: "Ethereum Mainnet",
-    blockExplorer: "https://etherscan.io",
-    ticker: "ETH",
-    tickerName: "Ethereum"
+                chainId: "0x2105",
+                displayName: "Base Mainnet",
+                rpcTarget: "https://mainnet.base.org",
+                blockExplorerUrl: "https://base.blockscout.com",
+                ticker: "ETH",
+                tickerName: "Ethereum",
+                logo: "https://github.com/base-org/brand-kit/raw/main/logo/in-product/Base_Network_Logo.svg",
             };
 
             const privateKeyProvider = new window.EthereumPrivateKeyProvider({
@@ -208,10 +210,17 @@ export default {
             //Metamask
             const metamaskAdapter = new MetamaskAdapter({
                 clientId,
-                sessionTime: 86400, // 1 hour in seconds
+                sessionTime: 86400,
                 web3AuthNetwork: window.WEB3AUTH_NETWORK.SAPPHIRE_DEVNET
                 });
             web3auth.configureAdapter(metamaskAdapter);
+
+            const coinbaseAdapter = new CoinbaseAdapter({
+                clientId: this.content.coinbaseProjectId,
+                sessionTime: 86400,
+                web3AuthNetwork: window.WEB3AUTH_NETWORK.SAPPHIRE_DEVNET,
+            });
+            web3auth.configureAdapter(coinbaseAdapter);
         
             await web3auth.init();
 
@@ -413,6 +422,19 @@ export default {
                 }
             };
             startMetamaskLogin();
+        },
+        coinbaseLogin() {
+            const startCoinbaseLogin = async () => {
+                if (!web3authGlobal.connected)
+                {
+                    await web3authGlobal.connectTo(window.WALLET_ADAPTERS.COINBASE);
+                    if (web3authGlobal.connected)
+                    {
+                        await this.sendWeb3AuthTokenToXano(web3authGlobal);
+                    }
+                }
+            };
+            startCoinbaseLogin();
         },
         onBlur() {
             this.isReallyFocused = false;

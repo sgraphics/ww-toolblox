@@ -14,6 +14,7 @@
     "dependencies": {
         "@walletconnect/modal": "^2.6.2",
         "@web3auth/base": "^8.8.0",
+        "@web3auth/coinbase-adapter": "^8.12.4",
         "@web3auth/ethereum-provider": "^8.12.3",
         "@web3auth/metamask-adapter": "^8.12.2",
         "@web3auth/no-modal": "^8.12.3",
