@@ -214,6 +214,7 @@ export default {
                 web3AuthNetwork: window.WEB3AUTH_NETWORK.SAPPHIRE_DEVNET
                 });
             web3auth.configureAdapter(metamaskAdapter);
+            
 
             const coinbaseAdapter = new CoinbaseAdapter({
                 clientId: this.content.coinbaseProjectId,
