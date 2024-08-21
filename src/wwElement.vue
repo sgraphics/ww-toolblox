@@ -215,7 +215,6 @@ export default {
                 });
             web3auth.configureAdapter(metamaskAdapter);
 
-            var xxx = new CoinbaseWalletSDK();
             const coinbaseAdapter = new CoinbaseAdapter({
                 clientId: this.content.coinbaseProjectId,
                 sessionTime: 86400,
