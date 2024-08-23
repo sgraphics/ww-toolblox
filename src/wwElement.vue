@@ -5,44 +5,35 @@
 <script>
 let web3authGlobal = {};
 let authTokenGlobal = "";
-window.web3Initialized = false;
+let web3InitializedGlobal = false;
 /* wwEditor:start */
-// if (window.Web3AuthNoModal == null || window.Web3AuthNoModal == undefined) {
-//   (async () => {
-//     try {
 /*
-        import { WalletConnectModal } from "@walletconnect/modal";
-        import { CoinbaseAdapter } from "@web3auth/coinbase-adapter";
-        import {
-        getWalletConnectV2Settings,
-        WalletConnectV2Adapter,
-        } from "@web3auth/wallet-connect-v2-adapter";
-        import { Web3AuthNoModal } from '@web3auth/no-modal';
-        import { EthereumPrivateKeyProvider } from "@web3auth/ethereum-provider";
-        import { CHAIN_NAMESPACES, WEB3AUTH_NETWORK, WALLET_ADAPTERS } from "@web3auth/base";
-        import { OpenloginAdapter } from '@web3auth/openlogin-adapter';
-        import { ethers } from "ethers";
-        import { MetamaskAdapter } from "@web3auth/metamask-adapter";
 
-        window.getWalletConnectV2Settings = getWalletConnectV2Settings;
-        window.WalletConnectV2Adapter = WalletConnectV2Adapter;
-        window.WalletConnectModal = WalletConnectModal;
-        window.Web3AuthNoModal = Web3AuthNoModal;
-        window.EthereumPrivateKeyProvider = EthereumPrivateKeyProvider;
-        window.CHAIN_NAMESPACES = CHAIN_NAMESPACES;
-        window.WEB3AUTH_NETWORK = WEB3AUTH_NETWORK;
-        window.WALLET_ADAPTERS = WALLET_ADAPTERS;
-        window.OpenloginAdapter = OpenloginAdapter;
-        window.ethers = ethers;
-        window.MetamaskAdapter = MetamaskAdapter;
+    import { Web3AuthNoModal } from '@web3auth/no-modal';
+    import { EthereumPrivateKeyProvider } from "@web3auth/ethereum-provider";
+    import { CHAIN_NAMESPACES, WEB3AUTH_NETWORK, WALLET_ADAPTERS } from "@web3auth/base";
+    import { OpenloginAdapter } from '@web3auth/openlogin-adapter';
+    import { ethers } from "ethers";
+    import { MetamaskAdapter } from "@web3auth/metamask-adapter";
+    import { Web3AuthSigner } from "@alchemy/aa-signers/web3auth";
+    import { createSmartAccountClient, base } from "@alchemy/aa-core";
+    import { createLightAccountClient } from "@alchemy/aa-accounts";
+    import { http, encodeFunctionData } from "viem";
+
+    window.Web3AuthNoModal = Web3AuthNoModal;
+    window.EthereumPrivateKeyProvider = EthereumPrivateKeyProvider;
+    window.CHAIN_NAMESPACES = CHAIN_NAMESPACES;
+    window.WEB3AUTH_NETWORK = WEB3AUTH_NETWORK;
+    window.WALLET_ADAPTERS = WALLET_ADAPTERS;
+    window.OpenloginAdapter = OpenloginAdapter;
+    window.ethers = ethers;
+    window.MetamaskAdapter = MetamaskAdapter;
+    window.Web3AuthSigner = Web3AuthSigner;
+
+
+
+    window.initComplete = Promise.resolve();
 */
-//     } catch (err) {
-//       //console.error('Failed to load Web3Auth modules', err);
-//     }
-//   })();
-// }
-
-//window.initComplete = Promise.resolve();
 /* wwEditor:end */
 
 export default {
@@ -138,24 +129,33 @@ export default {
         
         // Define the function to authenticate with Web3Auth
         const initWeb3Auth = async () => {
-        const chainConfig = {
-    chainNamespace: window.CHAIN_NAMESPACES.EIP155,
-    chainId: "0x1",
-    rpcTarget: "https://rpc.ankr.com/eth", // This is the public RPC we have added, please pass on your own endpoint while creating an app
-  };
+            const chainConfig = {
+                chainNamespace: window.CHAIN_NAMESPACES.EIP155,
+                chainId: "0x2105",
+                displayName: "Base Mainnet",
+                rpcTarget: "https://mainnet.base.org",
+                blockExplorerUrl: "https://base.blockscout.com",
+                ticker: "ETH",
+                tickerName: "Ethereum",
+                logo: "https://github.com/base-org/brand-kit/raw/main/logo/in-product/Base_Network_Logo.svg",
+            };
 
-        const privateKeyProvider = new window.EthereumPrivateKeyProvider({
-            config: { chainConfig },
-        });
-        var clientId = this.content.clientId;
+            const privateKeyProvider = new window.EthereumPrivateKeyProvider({
+                config: { chainConfig },
+            });
+            
+            var clientId = this.content.clientId;
+/* wwEditor:start */
+            //RDDTORTEST environment
+            clientId = "BCD3bVaYA3ZHu3F0bEs6eEyk3OzC1zZvTwkFkFQsiicid-7H4bxyQgBlC9IxCipUYlEbQ1P6ZqBzuDBAMx7svIA";
+/* wwEditor:end */
+            const web3AuthOptions = {
+                clientId,
+                web3AuthNetwork: window.WEB3AUTH_NETWORK.SAPPHIRE_DEVNET,
+                privateKeyProvider,
+            };
 
-        const web3AuthOptions = {
-            clientId,
-            web3AuthNetwork: window.WEB3AUTH_NETWORK.SAPPHIRE_DEVNET,
-            privateKeyProvider,
-        };
-
-        const web3auth = new window.Web3AuthNoModal(web3AuthOptions);
+            const web3auth = new window.Web3AuthNoModal(web3AuthOptions);
             web3authGlobal = web3auth;
 
             //OpenLogin
@@ -186,7 +186,9 @@ export default {
 
             web3auth.configureAdapter(openloginAdapter);
         
+            /* wwFront:start */
             //Wallet Connect
+            /*
             const defaultWcSettings = await getWalletConnectV2Settings(
                 "eip155",
                 ["8453"],
@@ -202,6 +204,15 @@ export default {
             
             web3auth.configureAdapter(walletConnectV2Adapter);
 
+            const coinbaseAdapter = new CoinbaseAdapter({
+                clientId: this.content.coinbaseProjectId,
+                sessionTime: 86400,
+                web3AuthNetwork: window.WEB3AUTH_NETWORK.SAPPHIRE_DEVNET,
+            });
+            web3auth.configureAdapter(coinbaseAdapter);
+*/
+            /* wwFront:end */
+
             //Metamask
             const metamaskAdapter = new MetamaskAdapter({
                 clientId,
@@ -209,14 +220,6 @@ export default {
                 web3AuthNetwork: window.WEB3AUTH_NETWORK.SAPPHIRE_DEVNET
                 });
             web3auth.configureAdapter(metamaskAdapter);
-
-
-            const coinbaseAdapter = new CoinbaseAdapter({
-                clientId: this.content.coinbaseProjectId,
-                sessionTime: 86400,
-                web3AuthNetwork: window.WEB3AUTH_NETWORK.SAPPHIRE_DEVNET,
-            });
-            web3auth.configureAdapter(coinbaseAdapter);
         
             await web3auth.init();
 
@@ -227,9 +230,13 @@ export default {
         const handleLogin = async (oauthToken, oauthVerifier, googleCode) => {
             await window.initComplete;
             const web3auth = await initWeb3Auth();
+            
+/* wwEditor:start */
+            await this.trySign(web3auth);
+/* wwEditor:end */
+
             if (web3auth.connected)
             {
-
                 try {
                     const result = await this.sendWeb3AuthTokenToXano(web3auth);
                     console.log("Login successful:", result);
@@ -278,9 +285,9 @@ export default {
             // Replace the current history state with the new URL
             window.history.replaceState({}, document.title, newUrl);
         }
-        if (window.web3Initialized == false)
+        if (web3InitializedGlobal == false)
         {
-            window.web3Initialized = true;
+            web3InitializedGlobal = true;
             handleLogin(oauthToken, oauthVerifier, code);
         }
 
@@ -439,12 +446,104 @@ export default {
         onBlur() {
             this.isReallyFocused = false;
         },
+        async trySign(web3auth)
+        {
+            if (web3auth.connected){
+                //logout and connect to metamask
+                await web3authGlobal.logout();
+            }
+            await web3authGlobal.connectTo(window.WALLET_ADAPTERS.METAMASK);
+
+            const web3AuthSigner = new Web3AuthSigner({
+                inner: web3authGlobal,
+            });
+            await web3AuthSigner.authenticate({
+                init: async () => {},
+                connect: async () => {},
+            });
+            
+            const address = await web3AuthSigner.getAddress();
+            const details = await web3AuthSigner.getAuthDetails();
+
+            const smartAccountClient = await createLightAccountClient({
+                transport: http("https://mainnet.base.org"),
+                chain: base,
+                account: 
+                {
+                    signer: web3AuthSigner,
+                },
+            });
+            
+            // Fetch necessary data from the account
+            var account = smartAccountClient.account;
+
+            //Build user operation locally
+            const uoStruct = {
+                sender: account.address,
+                nonce: await account.getNonce(),
+                initCode: account.getInitCode(),
+                callData: encodeFunctionData({
+                    abi: [
+                        {
+                            "inputs": [
+                                {
+                                    "internalType": "uint256",
+                                    "name": "fire",
+                                    "type": "uint256"
+                                }
+                            ],
+                            "name": "getCount",
+                            "outputs": [
+                                {
+                                    "internalType": "uint256",
+                                    "name": "",
+                                    "type": "uint256"
+                                }
+                            ],
+                            "stateMutability": "view",
+                            "type": "function"
+                        },
+                        {
+                            "inputs": [],
+                            "name": "increment",
+                            "outputs": [],
+                            "stateMutability": "nonpayable",
+                            "type": "function"
+                        }
+                    ],
+                    functionName: "getCount",
+                    args: [1],
+                }),
+                callGasLimit: "0x1",
+                verificationGasLimit: "0x1",
+                preVerificationGas: "0x1",
+                maxFeePerGas: "0x1",
+                maxPriorityFeePerGas: "0x1",
+                paymasterAndData: "0x1",
+                signature: account.getDummySignature(),
+            };
+
+            const request = await smartAccountClient.signUserOperation({ uoStruct });
+            
+            alert(JSON.stringify(request));
+            // You can use the BundlerAction `sendRawUserOperation` (packages/core/src/actions/bundler/sendRawUserOperation.ts)
+            // to send the signed user operation request to the bundler, requesting the bundler to send the signed uo to the
+            // EntryPoint contract pointed at the entryPoint address parameter
+            const entryPointAddress = account.getEntryPoint().address;
+            const uoHash = await smartAccountClient.sendRawUserOperation({ request, entryPoint: entryPointAddress });
+
+            alert(JSON.stringify(signedUserOperation));
+        },
         async sendWeb3AuthTokenToXano(web3auth)
         {
             const authenticationResult = await web3auth.authenticateUser();
             
             const web3authToken = authenticationResult.idToken;
-            const response = await fetch(this.content.xanoWeb3AuthEndpoint + '/oauth/web3auth/authenticate', {
+            var xanoUrl = this.content.xanoWeb3AuthEndpoint;
+            /* wwEditor:start */
+            xanoUrl = "https://xsrr-l2ye-dpbj.f2.xano.io/api:-jxPeK3Y";
+            /* wwEditor:end */
+            const response = await fetch(xanoUrl + '/oauth/web3auth/authenticate', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

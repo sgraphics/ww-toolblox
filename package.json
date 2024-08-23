@@ -12,6 +12,9 @@
         "create-config": "weweb config"
     },
     "dependencies": {
+        "@alchemy/aa-alchemy": "^3.19.0",
+        "@alchemy/aa-core": "^3.19.0",
+        "@alchemy/aa-signers": "^3.19.0",
         "@walletconnect/modal": "^2.6.2",
         "@web3auth/base": "^8.8.0",
         "@web3auth/coinbase-adapter": "^8.12.4",
