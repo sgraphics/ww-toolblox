@@ -7,7 +7,6 @@ let web3authGlobal = {};
 let authTokenGlobal = "";
 let web3InitializedGlobal = false;
 /* wwEditor:start */
-/*
 
     import { Web3AuthNoModal } from '@web3auth/no-modal';
     import { EthereumPrivateKeyProvider } from "@web3auth/ethereum-provider";
@@ -15,10 +14,9 @@ let web3InitializedGlobal = false;
     import { OpenloginAdapter } from '@web3auth/openlogin-adapter';
     import { ethers } from "ethers";
     import { MetamaskAdapter } from "@web3auth/metamask-adapter";
-    import { Web3AuthSigner } from "@alchemy/aa-signers/web3auth";
-    import { createSmartAccountClient, base } from "@alchemy/aa-core";
+    import { base, WalletClientSigner } from "@alchemy/aa-core";
     import { createLightAccountClient } from "@alchemy/aa-accounts";
-    import { http, encodeFunctionData } from "viem";
+    import { http, encodeFunctionData, createWalletClient, custom } from "viem";
 
     window.Web3AuthNoModal = Web3AuthNoModal;
     window.EthereumPrivateKeyProvider = EthereumPrivateKeyProvider;
@@ -28,12 +26,11 @@ let web3InitializedGlobal = false;
     window.OpenloginAdapter = OpenloginAdapter;
     window.ethers = ethers;
     window.MetamaskAdapter = MetamaskAdapter;
-    window.Web3AuthSigner = Web3AuthSigner;
+    window.WalletClientSigner = WalletClientSigner;
 
 
 
     window.initComplete = Promise.resolve();
-*/
 /* wwEditor:end */
 
 export default {
@@ -449,21 +446,15 @@ export default {
         async trySign(web3auth)
         {
             if (web3auth.connected){
-                //logout and connect to metamask
                 await web3authGlobal.logout();
             }
             await web3authGlobal.connectTo(window.WALLET_ADAPTERS.METAMASK);
 
-            const web3AuthSigner = new Web3AuthSigner({
-                inner: web3authGlobal,
+            const connectedAdapter = web3authGlobal.walletAdapters[web3authGlobal.connectedAdapterName];
+            const walletClient = createWalletClient({
+                transport: custom(connectedAdapter.provider),
             });
-            await web3AuthSigner.authenticate({
-                init: async () => {},
-                connect: async () => {},
-            });
-            
-            const address = await web3AuthSigner.getAddress();
-            const details = await web3AuthSigner.getAuthDetails();
+            const web3AuthSigner = new WalletClientSigner(walletClient, "web3auth");
 
             const smartAccountClient = await createLightAccountClient({
                 transport: http("https://mainnet.base.org"),
@@ -474,7 +465,6 @@ export default {
                 },
             });
             
-            // Fetch necessary data from the account
             var account = smartAccountClient.account;
 
             //Build user operation locally
@@ -526,9 +516,6 @@ export default {
             const request = await smartAccountClient.signUserOperation({ uoStruct });
             
             alert(JSON.stringify(request));
-            // You can use the BundlerAction `sendRawUserOperation` (packages/core/src/actions/bundler/sendRawUserOperation.ts)
-            // to send the signed user operation request to the bundler, requesting the bundler to send the signed uo to the
-            // EntryPoint contract pointed at the entryPoint address parameter
             const entryPointAddress = account.getEntryPoint().address;
             const uoHash = await smartAccountClient.sendRawUserOperation({ request, entryPoint: entryPointAddress });
 
