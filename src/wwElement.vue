@@ -102,7 +102,7 @@ export default  {
                 },
                 body: JSON.stringify({
                     code: googleCode,
-                    redirect_uri: window.location.href
+                    redirect_uri: this.content.redirectUri == "" ? window.location.href : this.content.redirectUri,
                 })
             });
             const data = await response.json();
@@ -163,7 +163,7 @@ export default  {
                     clientId: clientId,
                     network: window.WEB3AUTH_NETWORK.SAPPHIRE_DEVNET,
                     uxMode: "redirect",
-                    redirectUrl: window.location.href,
+                    redirectUrl: this.content.redirectUri == "" ? window.location.href : this.content.redirectUri,
                     loginConfig: {
                         jwt: {
                             name: "X Login",
@@ -349,6 +349,12 @@ export default  {
         },
     },
     methods: {
+        redirectToReturnUrl() {
+            const returnUrl = sessionStorage.getItem('returnUrl');
+            if (returnUrl && !window.location.href.toLowerCase().includes(returnUrl.toLowerCase())) {
+                window.location.href = returnUrl;
+            }
+        },
         logout() {
             (async function() {
                 try {
@@ -366,7 +372,8 @@ export default  {
                 return;
             }
             const fetchRequestUrlFromXano = async () => {
-                const response = await fetch(this.content.googleEndpoint + '/oauth/google/init?redirect_uri=' + window.location.href, {
+                const redirectUri = this.content.redirectUri == "" ? window.location.href : this.content.redirectUri;
+                const response = await fetch(this.content.googleEndpoint + '/oauth/google/init?redirect_uri=' + redirectUri, {
                     method: 'GET'
                 });
                 const data = await response.json();                
@@ -376,7 +383,7 @@ export default  {
                 try {
                     
                     const authUrl = await fetchRequestUrlFromXano();
-                    
+                    sessionStorage.setItem('returnUrl', window.location.href);
                     window.location.href = authUrl;
                 } catch (error) {
                     console.error("Login failed:", error);
@@ -387,7 +394,8 @@ export default  {
         xLogin() {
             //Do not check if connected because we want to start the login process to connect to X to fetch X username
             const fetchRequestUrlFromXano = async () => {
-                const response = await fetch(this.content.xanoXEndpoint + '/oauth/twitter/request_token?redirect_uri=' + window.location.href, {
+                const redirectUri = this.content.redirectUri == "" ? window.location.href : this.content.redirectUri;
+                const response = await fetch(this.content.xanoXEndpoint + '/oauth/twitter/request_token?redirect_uri=' + redirectUri, {
                     method: 'GET'
                 });
                 const data = await response.json();                
@@ -395,7 +403,8 @@ export default  {
             };
             const startXLogin = async () => {
                 try {
-                    const authUrl = await fetchRequestUrlFromXano();                    
+                    const authUrl = await fetchRequestUrlFromXano();
+                    sessionStorage.setItem('returnUrl', window.location.href);
                     window.location.href = authUrl;
                 } catch (error) {
                     console.error("Login failed:", error);
@@ -549,6 +558,9 @@ export default  {
             var authToken = data.authToken;
             authTokenGlobal = authToken;
             this.$emit('trigger-event', { name: 'authenticated', event: { value: authToken } });
+
+            
+            this.redirectToReturnUrl();
             /*
             //another way to get the wallet:
             var userId = data.user_id;
@@ -558,7 +570,7 @@ export default  {
             */
             return data;
         }
-    },
+    }
 };
 </script>
 

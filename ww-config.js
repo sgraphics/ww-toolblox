@@ -91,5 +91,16 @@ export default {
                 placeholder: 'Coinbase Project Id',
             }
         },
+        redirectUri:
+        {
+            label: { en: 'Redirect URI' },
+            type: 'Text',
+            section: 'settings',
+            defaultValue: '',
+            bindable: false,
+            options: {
+                placeholder: 'Redirect URI',
+            }
+        },
     },
 };
