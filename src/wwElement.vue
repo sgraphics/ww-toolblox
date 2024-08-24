@@ -351,8 +351,12 @@ export default  {
     methods: {
         redirectToReturnUrl() {
             const returnUrl = sessionStorage.getItem('returnUrl');
-            if (returnUrl && !window.location.href.toLowerCase().includes(returnUrl.toLowerCase())) {
-                window.location.href = returnUrl;
+            if (returnUrl) {
+                const trimmedReturnUrl = returnUrl.replace(/\/+$/, '').split('?')[0];
+                const trimmedCurrentUrl = window.location.href.replace(/\/+$/, '').split('?')[0];
+                if (trimmedReturnUrl.toLowerCase() !== trimmedCurrentUrl.toLowerCase()) {
+                    window.location.href = returnUrl;
+                }
             }
         },
         logout() {
