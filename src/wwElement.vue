@@ -26,14 +26,16 @@ let web3InitializedGlobal = false;
     window.OpenloginAdapter = OpenloginAdapter;
     window.ethers = ethers;
     window.MetamaskAdapter = MetamaskAdapter;
+
     window.WalletClientSigner = WalletClientSigner;
 
 */
 
     window.initComplete = Promise.resolve();
+
 /* wwEditor:end */
 
-export default {
+export default  {
     props: {
         content: { type: Object, required: true },
         wwFrontState: { type: Object, required: true },
@@ -63,7 +65,7 @@ export default {
         const fetchXJwtFromXano = async (oauthToken, oauthVerifier) => {
             if (web3authGlobal?.connected == true)
             {
-                //connect X to login
+                //connect X to login ok
                 await fetch(this.content.xanoXEndpoint + '/oauth/twitter/connect', {
                     method: 'POST',
                     headers: {
