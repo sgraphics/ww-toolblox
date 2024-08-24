@@ -454,6 +454,7 @@ export default {
             const walletClient = createWalletClient({
                 transport: custom(connectedAdapter.provider),
             });
+            
             const web3AuthSigner = new WalletClientSigner(walletClient, "web3auth");
 
             const smartAccountClient = await createLightAccountClient({
