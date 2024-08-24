@@ -7,7 +7,7 @@ let web3authGlobal = {};
 let authTokenGlobal = "";
 let web3InitializedGlobal = false;
 /* wwEditor:start */
-
+/*
     import { Web3AuthNoModal } from '@web3auth/no-modal';
     import { EthereumPrivateKeyProvider } from "@web3auth/ethereum-provider";
     import { CHAIN_NAMESPACES, WEB3AUTH_NETWORK, WALLET_ADAPTERS } from "@web3auth/base";
@@ -28,7 +28,7 @@ let web3InitializedGlobal = false;
     window.MetamaskAdapter = MetamaskAdapter;
     window.WalletClientSigner = WalletClientSigner;
 
-
+*/
 
     window.initComplete = Promise.resolve();
 /* wwEditor:end */
@@ -454,7 +454,7 @@ export default {
             const walletClient = createWalletClient({
                 transport: custom(connectedAdapter.provider),
             });
-            
+
             const web3AuthSigner = new WalletClientSigner(walletClient, "web3auth");
 
             const smartAccountClient = await createLightAccountClient({
