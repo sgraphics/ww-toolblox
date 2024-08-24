@@ -114,13 +114,21 @@ export default  {
         const authenticateWithWeb3Auth = async (web3auth, jwt) => {
             if (!web3auth.connected)
             {
+                const storedRedirectUri = sessionStorage.getItem('returnUrl');
+                const extraLoginOptions = {
+                    id_token: jwt,
+                    verifierIdField: "sub",
+                    domain: window.location.href,
+                };
+                
+                if (storedRedirectUri) {
+                    extraLoginOptions.redirect_uri = storedRedirectUri;
+                    sessionStorage.removeItem('returnUrl');
+                }
+
                 await web3auth.connectTo("openlogin", {
                     loginProvider: "jwt",
-                    extraLoginOptions: {
-                        id_token: jwt,
-                        verifierIdField: "sub",
-                        domain: window.location.href,
-                    },
+                    extraLoginOptions: extraLoginOptions,
                 });
             }
             return web3auth;
@@ -357,6 +365,7 @@ export default  {
                 if (trimmedReturnUrl.toLowerCase() !== trimmedCurrentUrl.toLowerCase()) {
                     window.location.href = returnUrl;
                 }
+                sessionStorage.removeItem('returnUrl');
             }
         },
         logout() {
