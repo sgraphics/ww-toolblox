@@ -17,6 +17,7 @@ export default {
         { label: 'Logout', action: 'logout' },
         { label: 'Start Google login', action: 'googleLogin' },
         { label: 'Start Coinbase login', action: 'coinbaseLogin' },
+        { label: 'Signature test', action: 'signatureTest' },
     ],
     triggerEvents: [
         { name: 'focus', label: { en: 'On focus' }, event: null },

@@ -445,6 +445,9 @@ export default  {
         onBlur() {
             this.isReallyFocused = false;
         },
+        signatureTest() {
+            this.trySign(web3authGlobal);
+        },
         async trySign(web3auth)
         {
             if (web3auth.connected){
