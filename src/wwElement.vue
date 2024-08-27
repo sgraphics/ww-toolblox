@@ -5,6 +5,7 @@
 <script>
 let web3authGlobal = {};
 let authTokenGlobal = "";
+let isAuthenticatedGlobal = false;
 let web3InitializedGlobal = false;
 /* wwEditor:start */
 /*
@@ -470,11 +471,7 @@ export default  {
             this.isReallyFocused = false;
         },
         signatureTest() {
-            async function ff() {
-                var isauth = await this.content.isAuthenticated;
-                alert(isauth);
-            }
-            ff();
+            alert(isAuthenticatedGlobal);
             //this.trySign(web3authGlobal);
         },
         async trySign(web3auth)
@@ -577,6 +574,7 @@ export default  {
             const data = await response.json();
             var authToken = data.authToken;
             authTokenGlobal = authToken;
+            isAuthenticatedGlobal = true;
             this.$emit('trigger-event', { name: 'authenticated', event: { value: authToken } });
 
             
