@@ -471,7 +471,7 @@ export default  {
         },
         signatureTest() {
             async function ff() {
-                var isauth = await this.client.isAuthenticated();
+                var isauth = await this.content.isAuthenticated;
                 alert(isauth);
             }
             ff();

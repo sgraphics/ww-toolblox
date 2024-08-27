@@ -36,6 +36,17 @@ export default {
             },
             defaultValue: '',
         },
+        isAuthenticated:
+        {
+            label: { en: 'Is Authenticated' },
+            type: 'Boolean',
+            section: 'settings',
+            bindable: true,
+            options: {
+                placeholder: 'Is Authenticated',
+            },
+            defaultValue: false,
+        },
         xanoWeb3AuthEndpoint:
         {
             label: { en: 'XANO Web3Auth URL' },
