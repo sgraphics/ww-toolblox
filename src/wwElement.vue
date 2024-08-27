@@ -435,7 +435,9 @@ export default  {
                     await web3authGlobal.connectTo(window.WALLET_ADAPTERS.WALLET_CONNECT_V2);
                     if (web3authGlobal.connected)
                     {
-                        await this.sendWeb3AuthTokenToXano(web3authGlobal);
+                        //Go to loading screen to sign in
+                        window.location.href = this.content.redirectUri;
+                        //await this.sendWeb3AuthTokenToXano(web3authGlobal);
                     }
                 }
             };
