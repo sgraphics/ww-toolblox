@@ -123,7 +123,8 @@ export default  {
                 
                 if (storedRedirectUri) {
                     extraLoginOptions.redirect_uri = storedRedirectUri;
-                    sessionStorage.removeItem('returnUrl');
+                    extraLoginOptions.domain = storedRedirectUri;
+                    //sessionStorage.removeItem('returnUrl');
                 }
 
                 await web3auth.connectTo("openlogin", {
@@ -195,7 +196,7 @@ export default  {
         
             /* wwFront:start */
             //Wallet Connect
-            /*
+            
             const defaultWcSettings = await getWalletConnectV2Settings(
                 "eip155",
                 ["8453"],
@@ -217,7 +218,7 @@ export default  {
                 web3AuthNetwork: window.WEB3AUTH_NETWORK.SAPPHIRE_DEVNET,
             });
             web3auth.configureAdapter(coinbaseAdapter);
-*/
+
             /* wwFront:end */
 
             //Metamask
@@ -239,7 +240,7 @@ export default  {
             const web3auth = await initWeb3Auth();
             
 /* wwEditor:start */
-            await this.trySign(web3auth);
+            //await this.trySign(web3auth);
 /* wwEditor:end */
 
             if (web3auth.connected)
@@ -363,6 +364,7 @@ export default  {
                 const trimmedReturnUrl = returnUrl.replace(/\/+$/, '').split('?')[0];
                 const trimmedCurrentUrl = window.location.href.replace(/\/+$/, '').split('?')[0];
                 if (trimmedReturnUrl.toLowerCase() !== trimmedCurrentUrl.toLowerCase()) {
+                    sessionStorage.removeItem('returnUrl');
                     window.location.href = returnUrl;
                 }
                 sessionStorage.removeItem('returnUrl');
@@ -468,7 +470,12 @@ export default  {
             this.isReallyFocused = false;
         },
         signatureTest() {
-            this.trySign(web3authGlobal);
+            async function ff() {
+                var isauth = await this.client.isAuthenticated();
+                alert(isauth);
+            }
+            ff();
+            //this.trySign(web3authGlobal);
         },
         async trySign(web3auth)
         {
