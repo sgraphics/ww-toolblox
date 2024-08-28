@@ -444,6 +444,7 @@ export default  {
                             await this.sendWeb3AuthTokenToXano(web3authGlobal);
                         } finally {
                             wwLib.wwVariable.updateValue(`${this.id}-isBusy`, false);
+                        }
                     }
                 }
             };
