@@ -23,6 +23,14 @@ export default {
         { name: 'authenticated', label: { en: 'On authenticated' }, event: { value: '' } },
     ],
     properties: {
+        isBusy: {
+            type: Boolean,
+            default: false,
+            title: 'Is Busy',
+            description: 'Indicates whether the system is busy or not',
+            section: 'data', // Make sure it's in the 'data' section
+            bindable: true, // This allows it to be available for binding
+        },
         xanoXEndpoint:
         {
             label: { en: 'XANO X URL' },

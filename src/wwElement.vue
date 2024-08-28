@@ -45,9 +45,6 @@ export default  {
         wwEditorState: { type: Object, required: true },
         /* wwEditor:end */
     },
-    variables: [
-        { name: 'isBusy', value: 'isBusy', type: 'boolean', defaultValue: false },
-    ],
     emits: [
         'add-state',
         'remove-state',
@@ -315,7 +312,7 @@ export default  {
     },
     data() {
         return {
-            //isReallyFocused: false,
+            //isBusy: false,
         };
     },
     computed: {
@@ -415,10 +412,10 @@ export default  {
                     {
                         //Go to loading screen to sign in
                         try {
-                            wwLib.wwVariable.updateValue(`${this.id}-isBusy`, true);
+                            this.isBusy = true;
                             await this.sendWeb3AuthTokenToXano(web3authGlobal);
                         } finally {
-                            wwLib.wwVariable.updateValue(`${this.id}-isBusy`, false);
+                            this.isBusy = false;
                         }
                     }
                 }
