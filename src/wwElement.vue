@@ -315,7 +315,7 @@ export default  {
     },
     data() {
         return {
-            isReallyFocused: false,
+            //isReallyFocused: false,
         };
     },
     computed: {
@@ -333,53 +333,8 @@ export default  {
         {
             return web3authGlobal?.connected == true;
         },
-        isFocused() {
-            /* wwEditor:start */
-            if (this.wwEditorState.isSelected) {
-                return this.wwElementState.states.includes('focus');
-            }
-            /* wwEditor:end */
-            return this.isReallyFocused;
-        },
-        isBusy() {
-            /* wwEditor:start */
-            if (this.wwEditorState.isSelected) {
-                return this.wwElementState.states.includes('busy');
-            }
-            /* wwEditor:end */
-            return this.wwElementState.props.busy === undefined
-                ? this.content.busy
-                : this.wwElementState.props.busy;
-        },
     },
     watch: {
-        isReallyFocused(isFocused, wasFocused) {
-            if (isFocused && !wasFocused) {
-                this.$emit('trigger-event', { name: 'focus' });
-            } else if (!isFocused && wasFocused) {
-                this.$emit('trigger-event', { name: 'blur' });
-            }
-        },
-        isFocused: {
-            immediate: true,
-            handler(value) {
-                if (value) {
-                    this.$emit('add-state', 'focus');
-                } else {
-                    this.$emit('remove-state', 'focus');
-                }
-            },
-        },
-        isBusy: {
-            immediate: true,
-            handler(value) {
-                if (value) {
-                    this.$emit('add-state', 'busy');
-                } else {
-                    this.$emit('remove-state', 'busy');
-                }
-            },
-        },
     },
     methods: {
         redirectToReturnUrl() {
@@ -460,10 +415,10 @@ export default  {
                     {
                         //Go to loading screen to sign in
                         try {
-                            this.content.isBusy = true;
+                            wwLib.wwVariable.updateValue(`${this.id}-isBusy`, true);
                             await this.sendWeb3AuthTokenToXano(web3authGlobal);
                         } finally {
-                            this.content.isBusy = false;
+                            wwLib.wwVariable.updateValue(`${this.id}-isBusy`, false);
                         }
                     }
                 }
@@ -497,9 +452,6 @@ export default  {
                 }
             };
             startCoinbaseLogin();
-        },
-        onBlur() {
-            this.isReallyFocused = false;
         },
         signatureTest() {
             alert(isAuthenticatedGlobal);

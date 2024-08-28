@@ -9,7 +9,7 @@ export default {
         },
         icon: 'cursor-click',
     },
-    states: ['focus', 'disabled'],
+    states: [],
     actions: [
         { label: 'Start X login', action: 'xLogin' },
         { label: 'Start Metamask login', action: 'metamaskLogin' },
@@ -20,24 +20,9 @@ export default {
         { label: 'Signature test', action: 'signatureTest' },
     ],
     triggerEvents: [
-        { name: 'focus', label: { en: 'On focus' }, event: null },
         { name: 'authenticated', label: { en: 'On authenticated' }, event: { value: '' } },
-        { name: 'blur', label: { en: 'On blur' }, event: null },
     ],
     properties: {
-        busy: {
-            label: { en: 'Is busy' },
-            type: 'OnOff',
-            section: 'settings',
-            bindable: true,
-            defaultValue: false,
-            /* wwEditor:start */
-            bindingValidation: {
-                type: 'boolean',
-                tooltip: 'A boolean that defines if the input is busy: `true | false`',
-            },
-            /* wwEditor:end */
-        },
         xanoXEndpoint:
         {
             label: { en: 'XANO X URL' },
