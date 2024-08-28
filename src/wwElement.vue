@@ -39,13 +39,15 @@ let web3InitializedGlobal = false;
 export default  {
     props: {
         content: { type: Object, required: true },
-        isBusy: { type: Boolean, required: true },
         wwFrontState: { type: Object, required: true },
         wwElementState: { type: Object, required: true },
         /* wwEditor:start */
         wwEditorState: { type: Object, required: true },
         /* wwEditor:end */
     },
+    variables: [
+        { name: 'isBusy', value: 'isBusy', type: 'boolean', defaultValue: false },
+    ],
     emits: [
         'add-state',
         'remove-state',
@@ -438,11 +440,10 @@ export default  {
                     {
                         //Go to loading screen to sign in
                         try {
-                            this.isBusy = true;
+                            wwLib.wwVariable.updateValue(`${this.id}-isBusy`, true);
                             await this.sendWeb3AuthTokenToXano(web3authGlobal);
                         } finally {
-                            this.isBusy = false;
-                        }
+                            wwLib.wwVariable.updateValue(`${this.id}-isBusy`, false);
                     }
                 }
             };
