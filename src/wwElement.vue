@@ -436,8 +436,12 @@ export default  {
                     if (web3authGlobal.connected)
                     {
                         //Go to loading screen to sign in
-                        window.location.href = this.content.redirectUri;
-                        //await this.sendWeb3AuthTokenToXano(web3authGlobal);
+                        try {
+                            this.content.isBusy = true;
+                            await this.sendWeb3AuthTokenToXano(web3authGlobal);
+                        } finally {
+                            this.content.isBusy = false;
+                        }
                     }
                 }
             };

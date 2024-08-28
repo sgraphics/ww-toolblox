@@ -102,5 +102,13 @@ export default {
                 placeholder: 'Redirect URI',
             }
         },
+        isBusy:
+        {
+            label: { en: 'Is busy' },
+            type: 'Boolean',
+            section: 'settings',
+            defaultValue: false,
+            bindable: true,
+        }
     },
 };
