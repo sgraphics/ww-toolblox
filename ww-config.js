@@ -25,6 +25,19 @@ export default {
         { name: 'blur', label: { en: 'On blur' }, event: null },
     ],
     properties: {
+        busy: {
+            label: { en: 'Is busy' },
+            type: 'OnOff',
+            section: 'settings',
+            bindable: true,
+            defaultValue: false,
+            /* wwEditor:start */
+            bindingValidation: {
+                type: 'boolean',
+                tooltip: 'A boolean that defines if the input is busy: `true | false`',
+            },
+            /* wwEditor:end */
+        },
         xanoXEndpoint:
         {
             label: { en: 'XANO X URL' },

@@ -341,6 +341,16 @@ export default  {
             /* wwEditor:end */
             return this.isReallyFocused;
         },
+        isBusy() {
+            /* wwEditor:start */
+            if (this.wwEditorState.isSelected) {
+                return this.wwElementState.states.includes('busy');
+            }
+            /* wwEditor:end */
+            return this.wwElementState.props.busy === undefined
+                ? this.content.busy
+                : this.wwElementState.props.busy;
+        },
     },
     watch: {
         isReallyFocused(isFocused, wasFocused) {
@@ -357,6 +367,16 @@ export default  {
                     this.$emit('add-state', 'focus');
                 } else {
                     this.$emit('remove-state', 'focus');
+                }
+            },
+        },
+        isBusy: {
+            immediate: true,
+            handler(value) {
+                if (value) {
+                    this.$emit('add-state', 'busy');
+                } else {
+                    this.$emit('remove-state', 'busy');
                 }
             },
         },
@@ -440,10 +460,10 @@ export default  {
                     {
                         //Go to loading screen to sign in
                         try {
-                            wwLib.wwVariable.updateValue(`${this.id}-isBusy`, true);
+                            this.content.isBusy = true;
                             await this.sendWeb3AuthTokenToXano(web3authGlobal);
                         } finally {
-                            wwLib.wwVariable.updateValue(`${this.id}-isBusy`, false);
+                            this.content.isBusy = false;
                         }
                     }
                 }
