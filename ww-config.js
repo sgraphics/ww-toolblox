@@ -21,16 +21,10 @@ export default {
     ],
     triggerEvents: [
         { name: 'authenticated', label: { en: 'On authenticated' }, event: { value: '' } },
+        { name: 'notBusy', label: { en: 'On not busy' } },
+        { name: 'isBusy', label: { en: 'On is busy' }, event: { value: '' } },
     ],
     properties: {
-        isBusy: {
-            type: Boolean,
-            default: false,
-            title: 'Is Busy',
-            description: 'Indicates whether the system is busy or not',
-            section: 'data', // Make sure it's in the 'data' section
-            bindable: true, // This allows it to be available for binding
-        },
         xanoXEndpoint:
         {
             label: { en: 'XANO X URL' },

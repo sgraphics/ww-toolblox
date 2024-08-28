@@ -326,10 +326,6 @@ export default  {
         tag() {
             return 'div';
         },
-        isAuthenticated()
-        {
-            return web3authGlobal?.connected == true;
-        },
     },
     watch: {
     },
@@ -413,9 +409,11 @@ export default  {
                         //Go to loading screen to sign in
                         try {
                             this.isBusy = true;
+                            this.$emit('trigger-event', { name: 'isBusy', event: { value: "Please wait while we connect to your wallet..." } });
                             await this.sendWeb3AuthTokenToXano(web3authGlobal);
                         } finally {
                             this.isBusy = false;
+                            this.$emit('trigger-event', { name: 'notBusy' });
                         }
                     }
                 }
