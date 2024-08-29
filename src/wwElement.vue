@@ -200,7 +200,7 @@ export default  {
             
             const defaultWcSettings = await getWalletConnectV2Settings(
                 "eip155",
-                ["8453"],
+                ["eip155:8453"],
                 this.content.walletConnectProjectId,
             );
             const walletConnectModal = new WalletConnectModal({
