@@ -409,7 +409,7 @@ export default  {
                         //Go to loading screen to sign in
                         try {
                             this.isBusy = true;
-                            this.$emit('trigger-event', { name: 'isBusy', event: { value: "Please wait while we connect to your wallet..." } });
+                            this.$emit('trigger-event', { name: 'isBusy', event: { value: "Please follow the instructions in your wallet to sign in." } });
                             await this.sendWeb3AuthTokenToXano(web3authGlobal);
                         } finally {
                             this.isBusy = false;
