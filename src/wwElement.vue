@@ -411,7 +411,12 @@ export default  {
                             this.isBusy = true;
                             this.$emit('trigger-event', { name: 'isBusy', event: { value: "Please follow the instructions in your wallet to sign in." } });
                             await this.sendWeb3AuthTokenToXano(web3authGlobal);
-                        } finally {
+                        }
+                        catch (error) {
+                            console.error("Login failed:", error);
+                            this.logout();
+                        }
+                        finally {
                             this.isBusy = false;
                             this.$emit('trigger-event', { name: 'notBusy' });
                         }
