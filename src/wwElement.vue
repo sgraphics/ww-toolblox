@@ -459,10 +459,9 @@ export default  {
         },
         async trySign(web3auth)
         {
-            if (web3auth.connected){
-                await web3authGlobal.logout();
+            if (!web3auth.connected){
+                return;
             }
-            await web3authGlobal.connectTo(window.WALLET_ADAPTERS.METAMASK);
 
             const connectedAdapter = web3authGlobal.walletAdapters[web3authGlobal.connectedAdapterName];
             const walletClient = createWalletClient({
