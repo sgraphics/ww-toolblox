@@ -200,7 +200,7 @@ export default  {
             
             const defaultWcSettings = await getWalletConnectV2Settings(
                 "eip155",
-                [8453],
+                [2105],
                 this.content.walletConnectProjectId,
             );
             const walletConnectModal = new WalletConnectModal({
@@ -454,8 +454,8 @@ export default  {
             startCoinbaseLogin();
         },
         signatureTest() {
-            alert(isAuthenticatedGlobal);
-            //this.trySign(web3authGlobal);
+            //alert(isAuthenticatedGlobal);
+            this.trySign(web3authGlobal);
         },
         async trySign(web3auth)
         {
@@ -481,6 +481,7 @@ export default  {
             });
             
             var account = smartAccountClient.account;
+            alert(`Address: ${account.address}`);
 
             //Build user operation locally
             const uoStruct = {
